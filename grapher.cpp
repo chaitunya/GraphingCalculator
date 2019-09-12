@@ -22,8 +22,8 @@ QSize Grapher::sizeHint() const
 void Grapher::paintEvent(QPaintEvent *)
 {
     // setup QPainterPath and update the path
-    QPainterPath *path = new QPainterPath;
-    updatePath(path);
+    QPainterPath path;
+    updatePath(&path);
 
     // setup QPainter
     QPainter painter(this);
@@ -32,15 +32,14 @@ void Grapher::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     // draw path
-    painter.drawPath(*path);
+    painter.drawPath(path);
 
     // clean up
     painter.setRenderHint(QPainter::Antialiasing, false);
     painter.setBrush(Qt::NoBrush);
-    painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 
-    // delete path from memory
-    delete path;
+    // update screen
+    painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 }
 
 void Grapher::updatePath(QPainterPath *path)

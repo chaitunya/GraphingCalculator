@@ -5,6 +5,7 @@
 #include <QBrush>
 #include <QPen>
 
+
 class Grapher : public QWidget
 {
     Q_OBJECT

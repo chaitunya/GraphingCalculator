@@ -11,5 +11,5 @@ Window::Window(QWidget *parent)
     QGridLayout *mainLayout = new QGridLayout;
     mainLayout->addWidget(grapher, 0, 0);
     setLayout(mainLayout);
-    setWindowTitle(tr("Sigma1"));
+    setWindowTitle(tr("Sigma"));
 }
