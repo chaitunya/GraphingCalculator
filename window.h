@@ -1,6 +1,5 @@
 #ifndef WINDOW_H
 #define WINDOW_H
-
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE

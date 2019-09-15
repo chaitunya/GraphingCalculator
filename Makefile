@@ -52,11 +52,13 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp \
 		window.cpp \
-		grapher.cpp moc_window.cpp \
+		grapher.cpp \
+		function.cpp moc_window.cpp \
 		moc_grapher.cpp
 OBJECTS       = main.o \
 		window.o \
 		grapher.o \
+		function.o \
 		moc_window.o \
 		moc_grapher.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -148,9 +150,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		GraphingCalculator.pro window.h \
-		grapher.h main.cpp \
+		grapher.h \
+		function.h main.cpp \
 		window.cpp \
-		grapher.cpp
+		grapher.cpp \
+		function.cpp
 QMAKE_TARGET  = GraphingCalculator
 DESTDIR       = 
 TARGET        = GraphingCalculator
@@ -362,8 +366,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents window.h grapher.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp window.cpp grapher.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents window.h grapher.h function.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp window.cpp grapher.cpp function.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -403,7 +407,8 @@ moc_window.cpp: window.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/chaitu/Documents/QtProjects/GraphingCalculator -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include window.h -o moc_window.cpp
 
-moc_grapher.cpp: grapher.h \
+moc_grapher.cpp: function.h \
+		grapher.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/chaitu/Documents/QtProjects/GraphingCalculator -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include grapher.h -o moc_grapher.cpp
@@ -426,11 +431,16 @@ main.o: main.cpp window.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 window.o: window.cpp grapher.h \
+		function.h \
 		window.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o window.o window.cpp
 
-grapher.o: grapher.cpp grapher.h
+grapher.o: grapher.cpp grapher.h \
+		function.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o grapher.o grapher.cpp
+
+function.o: function.cpp function.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o function.o function.cpp
 
 moc_window.o: moc_window.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_window.o moc_window.cpp

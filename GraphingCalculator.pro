@@ -26,8 +26,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         window.cpp \
-    grapher.cpp
+    grapher.cpp \
+    function.cpp
 
 HEADERS += \
         window.h \
-    grapher.h
+    grapher.h \
+    function.h
