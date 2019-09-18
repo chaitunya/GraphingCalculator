@@ -27,17 +27,25 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     std::vector<Function> functions;
     QBrush brush;
-    double xMin = -10;
+    double xMin = -5;
     double xMax = 10;
-    double yMin = -10;
+    double yMin = -7;
     double yMax = 10;
     double deltaX = 1;
-    bool initial_resize = true;
+
+    double xOffset;
+    double yOffset;
+    double xMinOriginal;
+    double xMaxOriginal;
+    double yMinOriginal;
+    double yMaxOriginal;
+    bool is_panning = false;
 };
 
 #endif // GRAPHER_H
