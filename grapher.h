@@ -10,6 +10,7 @@
 #include <functional>
 #include "function.h"
 
+
 class Grapher : public QWidget
 {
     Q_OBJECT
@@ -19,6 +20,7 @@ public:
     QSize sizeHint() const override;
     void addFunction(const Function &f, int index = -1);
     void removeFunction(int index);
+    QPoint cvtCoords(double x, double y);
 
 public slots:
 
@@ -30,10 +32,10 @@ protected:
 private:
     std::vector<Function> functions;
     QBrush brush;
-    double xMin = -100;
-    double xMax = 100;
-    double yMin = -100;
-    double yMax = 100;
+    double xMin = -10;
+    double xMax = 10;
+    double yMin = -10;
+    double yMax = 10;
     double deltaX = 1;
     bool initial_resize = true;
 };

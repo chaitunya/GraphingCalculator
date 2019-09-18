@@ -4,6 +4,13 @@
 
 #include <QPainter>
 
+#define getPxCoord(px, Func) height() - (\
+                                 (Func.mathFunc(px * (xMax - xMin) / width() + xMin) - yMin)\
+                                 / (yMax - yMin)\
+                                 * height()\
+                             )
+
+
 Grapher::Grapher(QWidget *parent)
     : QWidget(parent)
 {
@@ -24,23 +31,29 @@ QSize Grapher::sizeHint() const
 void Grapher::paintEvent(QPaintEvent *)
 {
     // setup QPainter
-    QPainter *painter = new QPainter(this);
-    painter->setBrush(brush);
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    
-    // transform painter to fit params
-    painter->scale(1, -1);
-    painter->setWindow(xMin, yMin, xMax - xMin, yMax - yMin);
+    QPainter painter(this);
+    painter.setBrush(brush);
+    painter.setRenderHint(QPainter::Antialiasing, true);
 
+    // graph axes
+    
+    // graph rules
+    
+    // graph functions
     for (Function f : functions) {
-        f.graphFunction(painter, xMin, xMax, deltaX);
+        painter.setPen(f.pen);
+        QPainterPath path;
+        path.moveTo(0, getPxCoord(0, f));
+        for (int p = 0; p < width(); p++) {
+            path.lineTo(p, getPxCoord(p, f));
+        }
+        painter.drawPath(path);
     }
     
     // clean up
-    painter->setRenderHint(QPainter::Antialiasing, false);
-    painter->setBrush(Qt::NoBrush);
-
-    delete painter;
+    painter.setRenderHint(QPainter::Antialiasing, false);
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 }
 
 void Grapher::addFunction(const Function &f, int index)
@@ -51,29 +64,17 @@ void Grapher::addFunction(const Function &f, int index)
         functions.insert(functions.begin() + index, f);
 }
 
-void Grapher::wheelEvent(QWheelEvent * event)
+void Grapher::wheelEvent(QWheelEvent * /*event*/)
 {
-    QPoint angleDelta = event->angleDelta() / 8;
-    if (angleDelta.x() != 0 && angleDelta.y() != 0) {
-        /* std::cout << "Angle delta: (" << angleDelta.x() << ", " << angleDelta.y() << ")" << std::endl; */
-        QPoint p = event->pos();
-        /* std::cout << "Position: (" << p.x() << ", " << p.y() << ")" << std::endl; */
-        int scroll_intensity = 1;
-        xMin -= (2 * std::signbit(angleDelta.x()) - 1) * scroll_intensity * (1 - (double)p.x() / width());
-        xMax += (2 * std::signbit(angleDelta.x()) - 1) * scroll_intensity * (double)p.x() / width();
-        /* std::cout << "xMin, xMax: " << xMin << ", " << xMax << std::endl; */
-        
-        update();
-    }
 }
 
 void Grapher::resizeEvent(QResizeEvent * event)
 {
-    if (!initial_resize) {
-        xMax = event->size().width() * (xMax - xMin) / event->oldSize().width() + xMin;
-        yMax = event->size().height() * (yMax - yMin) / event->oldSize().height() + xMin;
-    } else {
-        initial_resize = false;
-    }
+    /* if (!initial_resize) { */
+    /*     xMax = event->size().width() * (xMax - xMin) / event->oldSize().width() + xMin; */
+    /*     yMax = event->size().height() * (yMax - yMin) / event->oldSize().height() + xMin; */
+    /* } else { */
+    /*     initial_resize = false; */
+    /* } */
     QWidget::resizeEvent(event);
 }

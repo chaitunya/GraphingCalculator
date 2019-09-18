@@ -6,21 +6,23 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 AR	Makefile	/^AR            = ar cqs$/;"	m
 CC	Makefile	/^CC            = gcc$/;"	m
-CFLAGS	Makefile	/^CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)$/;"	m
+CFLAGS	Makefile	/^CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)$/;"	m
 CHK_DIR_EXISTS	Makefile	/^CHK_DIR_EXISTS= test -d$/;"	m
 COMPRESS	Makefile	/^COMPRESS      = gzip -9f$/;"	m
 COPY	Makefile	/^COPY          = cp -f$/;"	m
 COPY_DIR	Makefile	/^COPY_DIR      = cp -f -R$/;"	m
 COPY_FILE	Makefile	/^COPY_FILE     = cp -f$/;"	m
 CXX	Makefile	/^CXX           = g++$/;"	m
-CXXFLAGS	Makefile	/^CXXFLAGS      = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)$/;"	m
-DEFINES	Makefile	/^DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB$/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)$/;"	m
+DEFINES	Makefile	/^DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB$/;"	m
 DEL_DIR	Makefile	/^DEL_DIR       = rmdir$/;"	m
 DEL_FILE	Makefile	/^DEL_FILE      = rm -f$/;"	m
 DESTDIR	Makefile	/^DESTDIR       = $/;"	m
 DIST	Makefile	/^DIST          = \/usr\/lib\/x86_64-linux-gnu\/qt5\/mkspecs\/features\/spec_pre.prf \\$/;"	m
 DISTDIR	Makefile	/^DISTDIR = \/home\/chaitu\/Documents\/QtProjects\/GraphingCalculator\/.tmp\/GraphingCalculator1.0.0$/;"	m
 DISTNAME	Makefile	/^DISTNAME      = GraphingCalculator1.0.0$/;"	m
+FUNCTION_H	function.h	2;"	d
+Function	function.h	/^struct Function {$/;"	s
 GRAPHER_H	grapher.h	2;"	d
 Grapher	grapher.cpp	/^Grapher::Grapher(QWidget *parent)$/;"	f	class:Grapher
 Grapher	grapher.h	/^class Grapher : public QWidget$/;"	c
@@ -28,7 +30,7 @@ INCPATH	Makefile	/^INCPATH       = -I. -isystem \/usr\/include\/x86_64-linux-gnu
 INSTALL_DIR	Makefile	/^INSTALL_DIR   = cp -f -R$/;"	m
 INSTALL_FILE	Makefile	/^INSTALL_FILE  = install -m 644 -p$/;"	m
 INSTALL_PROGRAM	Makefile	/^INSTALL_PROGRAM = install -m 755 -p$/;"	m
-LFLAGS	Makefile	/^LFLAGS        = -Wl,-O1$/;"	m
+LFLAGS	Makefile	/^LFLAGS        = $/;"	m
 LIBS	Makefile	/^LIBS          = $(SUBLIBS) -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread $/;"	m
 LINK	Makefile	/^LINK          = g++$/;"	m
 MAKEFILE	Makefile	/^MAKEFILE      = Makefile$/;"	m
@@ -443,21 +445,32 @@ __unix	moc_predefs.h	61;"	d
 __unix__	moc_predefs.h	31;"	d
 __x86_64	moc_predefs.h	35;"	d
 __x86_64__	moc_predefs.h	225;"	d
+addFunction	grapher.cpp	/^void Grapher::addFunction(const Function &f, int index)$/;"	f	class:Grapher
 brush	grapher.h	/^    QBrush brush;$/;"	m	class:Grapher
+cvtCoords	grapher.cpp	/^QPoint Grapher::cvtCoords(double x, double y)$/;"	f	class:Grapher
 data	moc_grapher.cpp	/^    QByteArrayData data[1];$/;"	m	struct:qt_meta_stringdata_Grapher_t	file:
 data	moc_window.cpp	/^    QByteArrayData data[1];$/;"	m	struct:qt_meta_stringdata_Window_t	file:
+deltaX	grapher.h	/^    double deltaX = 1;$/;"	m	class:Grapher
 equationLineEdit	window.h	/^    QLineEdit *equationLineEdit;$/;"	m	class:Window
+functions	grapher.h	/^    std::vector<Function> functions;$/;"	m	class:Grapher
+getPxCoord	grapher.cpp	7;"	d	file:
 grapher	window.h	/^    Grapher *grapher;$/;"	m	class:Window
+initial_resize	grapher.h	/^    bool initial_resize = true;$/;"	m	class:Grapher
+isHidden	function.h	/^    bool isHidden = false;$/;"	m	struct:Function
 linux	moc_predefs.h	260;"	d
 main	main.cpp	/^int main(int argc, char *argv[])$/;"	f
+mathFunc	function.h	/^    mathfunc_t mathFunc;$/;"	m	struct:Function
+mathfunc_t	function.h	/^typedef std::function<double(double)> mathfunc_t;$/;"	t
 metaObject	moc_grapher.cpp	/^const QMetaObject *Grapher::metaObject() const$/;"	f	class:Grapher
 metaObject	moc_window.cpp	/^const QMetaObject *Window::metaObject() const$/;"	f	class:Window
 minimumSizeHint	grapher.cpp	/^QSize Grapher::minimumSizeHint() const$/;"	f	class:Grapher
 override	grapher.h	/^    QSize minimumSizeHint() const override;$/;"	m	class:Grapher
 override	grapher.h	/^    QSize sizeHint() const override;$/;"	m	class:Grapher
 override	grapher.h	/^    void paintEvent(QPaintEvent *event) override;$/;"	m	class:Grapher
+override	grapher.h	/^    void resizeEvent(QResizeEvent *event) override;$/;"	m	class:Grapher
+override	grapher.h	/^    void wheelEvent(QWheelEvent *event) override;$/;"	m	class:Grapher
 paintEvent	grapher.cpp	/^void Grapher::paintEvent(QPaintEvent *)$/;"	f	class:Grapher
-pen	grapher.h	/^    QPen pen;$/;"	m	class:Grapher
+pen	function.h	/^    QPen pen;$/;"	m	struct:Function
 qt_meta_data_Grapher	moc_grapher.cpp	/^static const uint qt_meta_data_Grapher[] = {$/;"	v	file:
 qt_meta_data_Window	moc_window.cpp	/^static const uint qt_meta_data_Window[] = {$/;"	v	file:
 qt_meta_stringdata_Grapher	moc_grapher.cpp	/^static const qt_meta_stringdata_Grapher_t qt_meta_stringdata_Grapher = {$/;"	v	file:
@@ -470,10 +483,15 @@ qt_metacast	moc_grapher.cpp	/^void *Grapher::qt_metacast(const char *_clname)$/;
 qt_metacast	moc_window.cpp	/^void *Window::qt_metacast(const char *_clname)$/;"	f	class:Window
 qt_static_metacall	moc_grapher.cpp	/^void Grapher::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)$/;"	f	class:Grapher
 qt_static_metacall	moc_window.cpp	/^void Window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)$/;"	f	class:Window
+resizeEvent	grapher.cpp	/^void Grapher::resizeEvent(QResizeEvent * event)$/;"	f	class:Grapher
 sizeHint	grapher.cpp	/^QSize Grapher::sizeHint() const$/;"	f	class:Grapher
 staticMetaObject	moc_grapher.cpp	/^const QMetaObject Grapher::staticMetaObject = {$/;"	m	class:Grapher	file:
 staticMetaObject	moc_window.cpp	/^const QMetaObject Window::staticMetaObject = {$/;"	m	class:Window	file:
 stringdata0	moc_grapher.cpp	/^    char stringdata0[8];$/;"	m	struct:qt_meta_stringdata_Grapher_t	file:
 stringdata0	moc_window.cpp	/^    char stringdata0[7];$/;"	m	struct:qt_meta_stringdata_Window_t	file:
 unix	moc_predefs.h	204;"	d
-updatePath	grapher.cpp	/^void Grapher::updatePath(QPainterPath *path)$/;"	f	class:Grapher
+wheelEvent	grapher.cpp	/^void Grapher::wheelEvent(QWheelEvent * \/*event*\/)$/;"	f	class:Grapher
+xMax	grapher.h	/^    double xMax = 100;$/;"	m	class:Grapher
+xMin	grapher.h	/^    double xMin = -100;$/;"	m	class:Grapher
+yMax	grapher.h	/^    double yMax = 100;$/;"	m	class:Grapher
+yMin	grapher.h	/^    double yMin = -100;$/;"	m	class:Grapher
