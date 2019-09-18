@@ -84,22 +84,37 @@ void Grapher::paintEvent(QPaintEvent *)
     majorRulePen.setColor(QColor(100, 100, 100));
     
     painter.setPen(majorRulePen);
+    
+    // setup text
+    
+    QFont font = painter.font();
+    font.setPixelSize(15); // Will make this variable font length
+    painter.setFont(font);
 
     double majorRulesPerInt = 1;
 
     for (double x = std::floor(xMin); x < std::ceil(xMax); x += 1 / majorRulesPerInt) {
-        if (xMin < x && x < xMax) {
-            int p = (x - xMin) / (xMax - xMin) * width();
-            painter.drawLine(p, 0, p, height());
+        if (xMin < x && x < xMax && x != 0) {
+            int px = (x - xMin) / (xMax - xMin) * width();
+            // draw rule
+            painter.drawLine(px, 0, px, height());
+            int py = height() - (-yMin / (yMax - yMin) * height());
+            // draw hatch mark numbers
+            painter.drawText(px, py + font.pixelSize(), QString::number(x));
         }
     }
 
     for (double y = std::floor(yMin); y < std::ceil(yMax); y += 1 / majorRulesPerInt) {
         if (yMin < y && y < yMax) {
-            int p = height() - ((y - yMin) / (yMax - yMin) * height());
-            painter.drawLine(0, p, width(), p);
+            int py = height() - ((y - yMin) / (yMax - yMin) * height());
+            // draw rule
+            painter.drawLine(0, py, width(), py);
+            int px = -xMin / (xMax - xMin) * width();
+            // draw hatch mark numbers
+            painter.drawText(px, py + font.pixelSize(), QString::number(y));
         }
     }
+
     
     // graph functions
     for (Function f : functions) {
@@ -115,7 +130,8 @@ void Grapher::paintEvent(QPaintEvent *)
     // clean up
     painter.setRenderHint(QPainter::Antialiasing, false);
     painter.setBrush(Qt::NoBrush);
-    painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
+    // draw border
+    /* painter.drawRect(QRect(0, 0, width() - 1, height() - 1)); */
 }
 
 void Grapher::addFunction(const Function &f, int index)
