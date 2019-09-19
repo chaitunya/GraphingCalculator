@@ -9,9 +9,12 @@
 
 typedef std::function<double(double)> mathfunc_t;
 
-struct Function {
+class Function {
+    Function(mathfunc_t mathFunc, QPen pen = QPen());
+    double derivative(double x, double dx);
+    double integral(double a, double b, double dx);
     mathfunc_t mathFunc;
-    QPen pen = QPen();
+    QPen pen;
     bool isHidden = false;
 };
 
