@@ -33,10 +33,10 @@ protected:
 private:
     std::vector<Function> functions;
     QBrush brush;
-    double xMin = -5;
-    double xMax = 10;
-    double yMin = -7;
-    double yMax = 10;
+    double xMin = -100;
+    double xMax = 100;
+    double yMin = -100;
+    double yMax = 100;
     double deltaX = 1;
 
     double xOffset;

@@ -11,6 +11,9 @@
                                  * height()\
                              )
 
+#define LIMIT(a, b, x) a < x ? a : (b > x ? b : x)
+#define LIMITL(a, x) a < x ? a : x
+#define LIMITR(b, x) b > x ? b : x
 
 Grapher::Grapher(QWidget *parent)
     : QWidget(parent)
@@ -63,7 +66,7 @@ void Grapher::paintEvent(QPaintEvent *)
 
     painter.setPen(minorRulePen);
 
-    double minorRulesPerInt = 2;
+    double minorRulesPerInt = 20 / (xMax - xMin);
     
     for (double x = std::floor(xMin); x < std::ceil(xMax); x += 1 / minorRulesPerInt) {
         if (xMin < x && x < xMax) {
@@ -88,10 +91,10 @@ void Grapher::paintEvent(QPaintEvent *)
     // setup text
     
     QFont font = painter.font();
-    font.setPixelSize(15); // Will make this variable font length
+    font.setPixelSize(LIMIT(10, (height() / 75), 30)); // Will make this variable font length
     painter.setFont(font);
 
-    double majorRulesPerInt = 1;
+    double majorRulesPerInt = 10 / (xMax - xMin);
 
     for (double x = std::floor(xMin); x < std::ceil(xMax); x += 1 / majorRulesPerInt) {
         if (xMin < x && x < xMax && x != 0) {
