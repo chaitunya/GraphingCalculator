@@ -1,3 +1,4 @@
 GraphingCalculator
 *.o
 moc*
+*.pro.user
