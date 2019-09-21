@@ -27,6 +27,7 @@ SOURCES += \
         main.cpp \
         window.cpp \
     grapher.cpp \
+    function.cpp
 
 HEADERS += \
         window.h \

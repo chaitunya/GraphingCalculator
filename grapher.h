@@ -29,14 +29,15 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     std::vector<Function> functions;
     QBrush brush;
-    double xMin = -100;
-    double xMax = 100;
-    double yMin = -100;
-    double yMax = 100;
+    double xMin = -10;
+    double xMax = 10;
+    double yMin = -10;
+    double yMax = 10;
     double deltaX = 1;
 
     double xOffset;
@@ -45,6 +46,8 @@ private:
     double xMaxOriginal;
     double yMinOriginal;
     double yMaxOriginal;
+
+    QPoint mouseOriginal;
     bool is_panning = false;
 };
 

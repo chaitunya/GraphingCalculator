@@ -1,5 +1,11 @@
 #include "function.h"
 
+Function::Function(mathfunc_t mathFunc)
+    : mathFunc(mathFunc), pen()
+{
+    pen.setWidth(2);
+}
+
 Function::Function(mathfunc_t mathFunc, QPen pen)
     : mathFunc(mathFunc), pen(pen)
 {

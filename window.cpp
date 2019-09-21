@@ -8,9 +8,9 @@ Window::Window(QWidget *parent)
     : QWidget(parent)
 {
     grapher = new Grapher;
-    Function f = {[](double x) {
+    Function f([](double x) {
         return (x - 0) * (x + 0);
-    }};
+    });
     f.pen.setWidth(3);
     grapher->addFunction(f);
     equationLineEdit = new QLineEdit;

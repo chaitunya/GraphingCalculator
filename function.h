@@ -10,7 +10,9 @@
 typedef std::function<double(double)> mathfunc_t;
 
 class Function {
-    Function(mathfunc_t mathFunc, QPen pen = QPen());
+public:
+    Function(mathfunc_t mathFunc);
+    Function(mathfunc_t mathFunc, QPen pen);
     double derivative(double x, double dx);
     double integral(double a, double b, double dx);
     mathfunc_t mathFunc;
