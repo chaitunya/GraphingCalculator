@@ -9,9 +9,10 @@ Window::Window(QWidget *parent)
 {
     grapher = new Grapher;
     Function f([](double x) {
-        return (x - 0) * (x + 0);
+        return x*x;
     });
-    f.pen.setWidth(3);
+    f.graph_derivative = true;
+    f.graph_integral = true;
     grapher->addFunction(f);
     equationLineEdit = new QLineEdit;
     QGridLayout *mainLayout = new QGridLayout;

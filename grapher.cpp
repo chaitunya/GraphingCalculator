@@ -5,8 +5,8 @@
 #include <QPainter>
 #include <QInputEvent>
 
-#define getPxCoord(px, Func) height() - (\
-                                 (Func.mathFunc(px * (xMax - xMin) / width() + xMin) - yMin)\
+#define getPxCoord(px, func) height() - (\
+                                 (func(px * (xMax - xMin) / width() + xMin) - yMin)\
                                  / (yMax - yMin)\
                                  * height()\
                              )
@@ -143,18 +143,34 @@ void Grapher::paintEvent(QPaintEvent *)
     for (Function f : functions) {
         painter.setPen(f.pen);
         QPainterPath path;
-        path.moveTo(0, getPxCoord(0, f));
+        path.moveTo(0, getPxCoord(0, f.mathFunc));
         for (int p = 0; p < width(); p++) {
-            path.lineTo(p, getPxCoord(p, f));
+            path.lineTo(p, getPxCoord(p, f.mathFunc));
         }
         painter.drawPath(path);
+        if (f.graph_derivative) {
+            QPainterPath path;
+            path.moveTo(0, getPxCoord(0, f.derivative));
+            for (int p = 0; p < width(); p++) {
+                path.lineTo(p, getPxCoord(p, f.derivative));
+            }
+            painter.drawPath(path);
+        }
+        if (f.graph_integral) {
+            QPainterPath path;
+            path.moveTo(0, getPxCoord(0, f.integral0));
+            for (int p = 0; p < width(); p++) {
+                path.lineTo(p, getPxCoord(p, f.integral0));
+            }
+            painter.drawPath(path);
+        }
     }
     
     // clean up
     painter.setRenderHint(QPainter::Antialiasing, false);
     painter.setBrush(Qt::NoBrush);
     // draw border
-    /* painter.drawRect(QRect(0, 0, width() - 1, height() - 1)); */
+    painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 }
 
 void Grapher::addFunction(const Function &f, int index)
