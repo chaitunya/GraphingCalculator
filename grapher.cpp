@@ -35,13 +35,15 @@ void Grapher::paintEvent(QPaintEvent *)
     QPen ax_pen;
     ax_pen.setWidth(2);
     
-    if (xMin < 0 && 0 < xMax) {
+    if (xMin < 0 && 0 < xMax)
+    {
         painter.setPen(ax_pen);
         int p = -xMin / (xMax - xMin) * width();
         painter.drawLine(p, 0, p, height());
     }
 
-    if (yMin < 0 && 0 < yMax) {
+    if (yMin < 0 && 0 < yMax)
+    {
         painter.setPen(ax_pen);
         int p = height() - (-yMin / (yMax - yMin) * height());
         painter.drawLine(0, p, width(), p);
@@ -56,7 +58,8 @@ void Grapher::paintEvent(QPaintEvent *)
     
     int multipleOf = 1;
 
-    for (int scale : scales) {
+    for (int scale : scales)
+    {
         double log = std::log10(ref / scale);
         double dist = std::abs(std::round(log) - log);
         double log_min = std::log10(ref / multipleOf);
@@ -87,8 +90,10 @@ void Grapher::paintEvent(QPaintEvent *)
 
     for (double x = intsPerMinorRule * std::floor(xMin / intsPerMinorRule);
             x < intsPerMinorRule * std::ceil(xMax / intsPerMinorRule);
-            x += intsPerMinorRule) {
-        if (xMin <= x && x <= xMax) {
+            x += intsPerMinorRule)
+    {
+        if (xMin <= x && x <= xMax)
+        {
             int p = (x - xMin) / (xMax - xMin) * width();
             painter.drawLine(p, 0, p, height());
         }
@@ -96,8 +101,10 @@ void Grapher::paintEvent(QPaintEvent *)
 
     for (double y = intsPerMinorRule * std::floor(yMin / intsPerMinorRule);
             y < intsPerMinorRule * std::ceil(yMax / intsPerMinorRule);
-            y += intsPerMinorRule) {
-        if (yMin <= y && y <= yMax) {
+            y += intsPerMinorRule)
+    {
+        if (yMin <= y && y <= yMax)
+        {
             int p = height() - ((y - yMin) / (yMax - yMin) * height());
             painter.drawLine(0, p, width(), p);
         }
@@ -119,8 +126,10 @@ void Grapher::paintEvent(QPaintEvent *)
 
     for (double x = intsPerMajorRule * std::floor(xMin / intsPerMajorRule);
             x < intsPerMajorRule * std::ceil(xMax / intsPerMajorRule);
-            x += intsPerMajorRule) {
-        if (xMin <= x && x <= xMax && x != 0) {
+            x += intsPerMajorRule)
+    {
+        if (xMin <= x && x <= xMax && x != 0)
+        {
             double px = (x - xMin) / (xMax - xMin) * (double)width();
             // draw rule
             painter.setPen(majorRulePen);
@@ -136,8 +145,10 @@ void Grapher::paintEvent(QPaintEvent *)
 
     for (double y = intsPerMajorRule * std::floor(yMin / intsPerMajorRule);
             y < intsPerMajorRule * std::ceil(yMax / intsPerMajorRule);
-            y += intsPerMajorRule) {
-        if (yMin <= y && y <= yMax) {
+            y += intsPerMajorRule)
+    {
+        if (yMin <= y && y <= yMax)
+        {
             double py = height() - ((y - yMin) / (yMax - yMin) * height());
             // draw rule
             painter.setPen(majorRulePen);
@@ -153,13 +164,17 @@ void Grapher::paintEvent(QPaintEvent *)
 
     
     // graph functions
-    for (Function f : functions) {
-        if (!f.isHidden) {
+    for (Function f : functions)
+    {
+        if (!f.isHidden)
+        {
             f.graphFunction(this, painter);
-            if (f.graph_derivative) {
+            if (f.graph_derivative)
+            {
                 f.graphDerivative(this, painter);
             }
-            if (f.graph_integral) {
+            if (f.graph_integral)
+            {
                 f.graphIntegral(this, painter);
             }
         }
@@ -183,14 +198,13 @@ void Grapher::addFunction(const Function &f, int index)
 void Grapher::wheelEvent(QWheelEvent * event)
 {
     double numSteps = (double)event->angleDelta().y() / 120;
-    int sign = 2 * std::signbit(numSteps) - 1;
     double scrollIntensity = 0.05;
     double xLen = xMax - xMin;
     double yLen = yMax - yMin;
-    xMin -= sign * (double)event->x() / width() * xLen * scrollIntensity;
-    xMax += sign * (double)(width() - event->x()) / width() * xLen * scrollIntensity;
-    yMin -= sign * (double)(height() - event->y()) / height() * yLen * scrollIntensity;
-    yMax += sign * (double)event->y() / height() * yLen * scrollIntensity;
+    xMin += numSteps * (double)event->x() / width() * xLen * scrollIntensity;
+    xMax -= numSteps * (double)(width() - event->x()) / width() * xLen * scrollIntensity;
+    yMin += numSteps * (double)(height() - event->y()) / height() * yLen * scrollIntensity;
+    yMax -= numSteps * (double)event->y() / height() * yLen * scrollIntensity;
     update();
 }
 
@@ -213,7 +227,8 @@ void Grapher::mouseMoveEvent(QMouseEvent * event)
 {
     QWidget::mouseMoveEvent(event);
 
-    if (is_panning) {
+    if (is_panning)
+    {
         QPoint deltaPos = mouseOriginal - event->pos();
         xMin = xMinOriginal + (double)deltaPos.x() / width() * (xMax - xMin);
         xMax = xMaxOriginal + (double)deltaPos.x() / width() * (xMax - xMin);
@@ -237,6 +252,7 @@ void Grapher::resizeEvent(QResizeEvent *event)
         double yCenter = (yMax + yMin) / 2;
         yMax = yCenter + yNewSize / 2;
         yMin = yCenter - yNewSize / 2;
-    } else
+    } else {
         initial_resize = false;
+    }
 }
