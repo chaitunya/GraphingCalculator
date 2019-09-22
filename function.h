@@ -9,6 +9,8 @@
 
 typedef std::function<double(double)> mathfunc_t;
 
+class Grapher;
+
 class Function {
 public:
     Function(mathfunc_t mathFunc);
@@ -16,6 +18,9 @@ public:
     double derivative(double x);
     double integral(double a, double b);
     double integral0(double x);
+    void graphFunction(Grapher *grapher, QPainter &painter);
+    void graphIntegral(Grapher *grapher, QPainter &painter);
+    void graphDerivative(Grapher *grapher, QPainter &painter);
     mathfunc_t mathFunc;
     QPen pen;
     bool isHidden = false;

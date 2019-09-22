@@ -6,15 +6,7 @@
 #include <QInputEvent>
 #include <array>
 
-#define getPxCoord(px, func) height() - (\
-                                 (func(px * (xMax - xMin) / width() + xMin) - yMin)\
-                                 / (yMax - yMin)\
-                                 * height()\
-                             )
-
-#define LIMIT(a, b, x) a < x ? a : (b > x ? b : x)
-#define LIMITL(a, x) a < x ? a : x
-#define LIMITR(b, x) b > x ? b : x
+#define MIN(x, y) x < y ? x : y
 
 Grapher::Grapher(QWidget *parent)
     : QWidget(parent)
@@ -60,7 +52,7 @@ void Grapher::paintEvent(QPaintEvent *)
     // graph rules
     
     // calculate scale
-    double ref = (xMax - xMin) / 5;
+    double ref = (xMax - xMin) / width() * 100;
 
     std::array<int, 3> scales = {1, 2, 5};
     
@@ -117,20 +109,15 @@ void Grapher::paintEvent(QPaintEvent *)
     majorRulePen.setWidth(1);
     majorRulePen.setColor(QColor(100, 100, 100));
     
-    painter.setPen(majorRulePen);
     
     // setup text
 
     QPen textPen;
-    textPen.setColor(QColor(0, 0, 0));
+    textPen.setColor(QColor(Qt::black));
     
     QFont font = painter.font();
-    font.setPixelSize(15); // Will make this variable font length
+    font.setPixelSize(15);
     painter.setFont(font);
-
-    if (intsPerMajorRule == 0) {
-        intsPerMajorRule = (xMax - xMin) / 10;
-    }
 
     for (double x = intsPerMajorRule * std::floor(xMin / intsPerMajorRule);
             x < intsPerMajorRule * std::ceil(xMax / intsPerMajorRule);
@@ -138,11 +125,13 @@ void Grapher::paintEvent(QPaintEvent *)
         if (xMin <= x && x <= xMax && x != 0) {
             double px = (x - xMin) / (xMax - xMin) * (double)width();
             // draw rule
+            painter.setPen(majorRulePen);
             painter.drawLine(px, 0, px, height());
             int py = height() - (-yMin / (yMax - yMin) * height());
             // round to certain precision
             double xRounded = std::round(x / intsPerMajorRule) * intsPerMajorRule;
             // draw hatch mark numbers
+            painter.setPen(textPen);
             painter.drawText(px, py + font.pixelSize(), tr(" ") + QString::number(xRounded));
         }
     }
@@ -153,11 +142,13 @@ void Grapher::paintEvent(QPaintEvent *)
         if (yMin <= y && y <= yMax) {
             double py = height() - ((y - yMin) / (yMax - yMin) * height());
             // draw rule
+            painter.setPen(majorRulePen);
             painter.drawLine(0, py, width(), py);
             int px = -xMin / (xMax - xMin) * width();
             // round to certain precision
             double yRounded = std::round(y / intsPerMajorRule) * intsPerMajorRule;
             // draw hatch mark numbers
+            painter.setPen(textPen);
             painter.drawText(px, py + font.pixelSize(), tr(" ") + QString::number(yRounded));
         }
     }
@@ -165,28 +156,14 @@ void Grapher::paintEvent(QPaintEvent *)
     
     // graph functions
     for (Function f : functions) {
-        painter.setPen(f.pen);
-        QPainterPath path;
-        path.moveTo(0, getPxCoord(0, f.mathFunc));
-        for (int p = 0; p < width(); p++) {
-            path.lineTo(p, getPxCoord(p, f.mathFunc));
-        }
-        painter.drawPath(path);
-        if (f.graph_derivative) {
-            QPainterPath path;
-            path.moveTo(0, getPxCoord(0, f.derivative));
-            for (int p = 0; p < width(); p++) {
-                path.lineTo(p, getPxCoord(p, f.derivative));
+        if (!f.isHidden) {
+            f.graphFunction(this, painter);
+            if (f.graph_derivative) {
+                f.graphDerivative(this, painter);
             }
-            painter.drawPath(path);
-        }
-        if (f.graph_integral) {
-            QPainterPath path;
-            path.moveTo(0, getPxCoord(0, f.integral0));
-            for (int p = 0; p < width(); p++) {
-                path.lineTo(p, getPxCoord(p, f.integral0));
+            if (f.graph_integral) {
+                f.graphIntegral(this, painter);
             }
-            painter.drawPath(path);
         }
     }
     
@@ -252,3 +229,14 @@ void Grapher::mouseReleaseEvent(QMouseEvent * event)
     is_panning = false;
 }
 
+void Grapher::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    if (!initial_resize) {
+        double yNewSize = height() * (xMax - xMin) / width();
+        double yCenter = (yMax + yMin) / 2;
+        yMax = yCenter + yNewSize / 2;
+        yMin = yCenter - yNewSize / 2;
+    } else
+        initial_resize = false;
+}

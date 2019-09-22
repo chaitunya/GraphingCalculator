@@ -30,6 +30,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     std::vector<Function> functions;
@@ -47,8 +48,14 @@ private:
     double yMinOriginal;
     double yMaxOriginal;
 
+    bool initial_resize = true;
+
     QPoint mouseOriginal;
     bool is_panning = false;
+
+    friend void Function::graphFunction(Grapher *grapher, QPainter &painter);
+    friend void Function::graphIntegral(Grapher *grapher, QPainter &painter);
+    friend void Function::graphDerivative(Grapher *grapher, QPainter &painter);
 };
 
 #endif // GRAPHER_H
