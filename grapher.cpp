@@ -185,10 +185,12 @@ void Grapher::wheelEvent(QWheelEvent * event)
     double numSteps = (double)event->angleDelta().y() / 120;
     int sign = 2 * std::signbit(numSteps) - 1;
     double scrollIntensity = 0.05;
-    xMin -= sign * (double)event->x() / width() * (xMax - xMin) * scrollIntensity;
-    xMax += sign * (double)(width() - event->x()) / width() * (xMax - xMin) * scrollIntensity;
-    yMin -= sign * (double)(height() - event->y()) / height() * (yMax - yMin) * scrollIntensity;
-    yMax += sign * (double)event->y() / height() * (yMax - yMin) * scrollIntensity;
+    double xLen = xMax - xMin;
+    double yLen = yMax - yMin;
+    xMin -= sign * (double)event->x() / width() * xLen * scrollIntensity;
+    xMax += sign * (double)(width() - event->x()) / width() * xLen * scrollIntensity;
+    yMin -= sign * (double)(height() - event->y()) / height() * yLen * scrollIntensity;
+    yMax += sign * (double)event->y() / height() * yLen * scrollIntensity;
     update();
 }
 
