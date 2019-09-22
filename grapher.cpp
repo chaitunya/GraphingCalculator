@@ -6,8 +6,6 @@
 #include <QInputEvent>
 #include <array>
 
-#define MIN(x, y) x < y ? x : y
-
 Grapher::Grapher(QWidget *parent)
     : QWidget(parent)
 {
@@ -17,7 +15,7 @@ Grapher::Grapher(QWidget *parent)
 
 QSize Grapher::minimumSizeHint() const
 {
-    return QSize(100, 100);
+    return QSize(400, 400);
 }
 
 QSize Grapher::sizeHint() const
