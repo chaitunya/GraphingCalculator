@@ -2,3 +2,4 @@ GraphingCalculator
 *.o
 moc*
 *.pro.user
+.qmake.stash
