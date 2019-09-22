@@ -4,6 +4,7 @@
 
 #include <QPainter>
 #include <QInputEvent>
+#include <array>
 
 #define getPxCoord(px, func) height() - (\
                                  (func(px * (xMax - xMin) / width() + xMin) - yMin)\
@@ -57,7 +58,35 @@ void Grapher::paintEvent(QPaintEvent *)
     }
     
     // graph rules
+    
+    // calculate scale
+    double ref = (xMax - xMin) / 5;
 
+    std::array<int, 3> scales = {1, 2, 5};
+    
+    int multipleOf = 1;
+
+    for (int scale : scales) {
+        double log = std::log10(ref / scale);
+        double dist = std::abs(std::round(log) - log);
+        double log_min = std::log10(ref / multipleOf);
+        double dist_min = std::abs(std::round(log_min) - log_min);
+        if (dist < dist_min)
+            multipleOf = scale;
+    }
+
+    int exp = std::round(std::log10(ref / multipleOf));
+
+
+    double intsPerMajorRule = multipleOf * std::pow(10, exp);
+
+    double intsPerMinorRule;
+
+    if (multipleOf == 2)
+        intsPerMinorRule = intsPerMajorRule / 4;
+    else
+        intsPerMinorRule = intsPerMajorRule / 5;
+    
     // minor rules
 
     QPen minorRulePen;
@@ -66,8 +95,6 @@ void Grapher::paintEvent(QPaintEvent *)
 
     painter.setPen(minorRulePen);
 
-    double intsPerMinorRule = 1;
-    
     for (double x = intsPerMinorRule * std::floor(xMin / intsPerMinorRule);
             x < intsPerMinorRule * std::ceil(xMax / intsPerMinorRule);
             x += intsPerMinorRule) {
@@ -100,9 +127,6 @@ void Grapher::paintEvent(QPaintEvent *)
     QFont font = painter.font();
     font.setPixelSize(15); // Will make this variable font length
     painter.setFont(font);
-
-    
-    double intsPerMajorRule = 2;
 
     if (intsPerMajorRule == 0) {
         intsPerMajorRule = (xMax - xMin) / 10;
