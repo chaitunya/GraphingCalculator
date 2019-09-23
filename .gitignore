@@ -1,5 +1,7 @@
 GraphingCalculator
 *.o
-moc*
-*.pro.user
-.qmake.stash
+Makefile
+CMakeCache.txt
+cmake_install.cmake
+GraphingCalculator_autogen/**
+CMakeFiles/**
