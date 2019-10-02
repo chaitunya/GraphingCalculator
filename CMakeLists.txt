@@ -22,9 +22,11 @@ set(SOURCES
     src/window.cpp
     src/grapher.cpp
     src/function.cpp
+    src/equation_widget.cpp
     include/window.h
     include/grapher.h
     include/function.h
+    include/equation_widget.h
 )
 
 add_executable(GraphingCalculator ${SOURCES} ${MOC_HEADERS})
@@ -33,4 +35,5 @@ target_link_libraries(GraphingCalculator
   Qt5::Core
   Qt5::Widgets  
   Qt5::Gui  
+  mathpresso
 )

@@ -5,9 +5,10 @@
 #include <QPainter>
 #include <QInputEvent>
 #include <array>
+#include "window.h"
 
-Grapher::Grapher(QWidget *parent)
-    : QWidget(parent)
+Grapher::Grapher(std::vector<EquationWidget*> *eqWidgets, QWidget *parent)
+    : QWidget(parent), equationWidgets(eqWidgets)
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
@@ -164,18 +165,19 @@ void Grapher::paintEvent(QPaintEvent *)
 
     
     // graph functions
-    for (Function f : functions)
+    for (EquationWidget *eqWidg: *equationWidgets)
     {
-        if (!f.isHidden)
+        Function *f = eqWidg->getFunction();
+        if (!f->isHidden && f->getValid())
         {
-            f.graphFunction(this, painter);
-            if (f.graph_derivative)
+            f->graphFunction(this, &painter);
+            if (f->b_graphDerivative)
             {
-                f.graphDerivative(this, painter);
+                f->graphDerivative(this, &painter);
             }
-            if (f.graph_integral)
+            if (f->b_graphIntegral)
             {
-                f.graphIntegral(this, painter);
+                f->graphIntegral(this, &painter);
             }
         }
     }
@@ -185,14 +187,6 @@ void Grapher::paintEvent(QPaintEvent *)
     painter.setBrush(Qt::NoBrush);
     // draw border
     painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
-}
-
-void Grapher::addFunction(const Function &f, int index)
-{
-    if (index == -1)
-        functions.push_back(f);
-    else
-        functions.insert(functions.begin() + index, f);
 }
 
 void Grapher::wheelEvent(QWheelEvent * event)

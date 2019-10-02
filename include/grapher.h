@@ -8,17 +8,19 @@
 #include <QWheelEvent>
 #include <vector>
 #include <functional>
+#include "equation_widget.h"
 #include "function.h"
 
+struct EquationPair;
 
 class Grapher : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Grapher(QWidget *parent = nullptr);
+    explicit Grapher(std::vector<EquationWidget*> *eqWidgets, QWidget *parent = nullptr);
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
-    void addFunction(const Function &f, int index = -1);
+    void addFunction(Function *f, int index = -1);
     void removeFunction(int index);
     QPoint cvtCoords(double x, double y);
 
@@ -33,7 +35,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    std::vector<Function> functions;
+    std::vector<EquationWidget*> *equationWidgets;
     QBrush brush;
     double xMin = -10;
     double xMax = 10;
@@ -53,9 +55,9 @@ private:
     QPoint mouseOriginal;
     bool is_panning = false;
 
-    friend void Function::graphFunction(Grapher *grapher, QPainter &painter);
-    friend void Function::graphIntegral(Grapher *grapher, QPainter &painter);
-    friend void Function::graphDerivative(Grapher *grapher, QPainter &painter);
+    friend void Function::graphFunction(Grapher *grapher, QPainter *painter);
+    friend void Function::graphIntegral(Grapher *grapher, QPainter *painter);
+    friend void Function::graphDerivative(Grapher *grapher, QPainter *painter);
 };
 
 #endif // GRAPHER_H
