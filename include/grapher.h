@@ -55,9 +55,7 @@ private:
     QPoint mouseOriginal;
     bool is_panning = false;
 
-    friend void Function::graphFunction(Grapher *grapher, QPainter *painter);
-    friend void Function::graphIntegral(Grapher *grapher, QPainter *painter);
-    friend void Function::graphDerivative(Grapher *grapher, QPainter *painter);
+    friend class Function;
 };
 
 #endif // GRAPHER_H
