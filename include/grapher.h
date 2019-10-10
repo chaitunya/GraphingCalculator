@@ -15,47 +15,47 @@ struct EquationPair;
 
 class Grapher : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    explicit Grapher(std::vector<EquationWidget*> *eqWidgets, QWidget *parent = nullptr);
-    QSize minimumSizeHint() const override;
-    QSize sizeHint() const override;
-    void addFunction(Function *f, int index = -1);
-    void removeFunction(int index);
-    QPoint cvtCoords(double x, double y);
+  explicit Grapher(std::vector<EquationWidget*> *eqWidgets, QWidget *parent = nullptr);
+  QSize minimumSizeHint() const override;
+  QSize sizeHint() const override;
+  void addFunction(Function *f, int index = -1);
+  void removeFunction(int index);
+  QPoint cvtCoords(double x, double y);
 
 public slots:
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
+  void wheelEvent(QWheelEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void resizeEvent(QResizeEvent *event) override;
 
 private:
-    std::vector<EquationWidget*> *equationWidgets;
-    QBrush brush;
-    double xMin = -10;
-    double xMax = 10;
-    double yMin = -10;
-    double yMax = 10;
-    double deltaX = 1;
+  std::vector<EquationWidget*> *equationWidgets;
+  QBrush brush;
+  double xMin = -10;
+  double xMax = 10;
+  double yMin = -10;
+  double yMax = 10;
+  double deltaX = 1;
 
-    double xOffset;
-    double yOffset;
-    double xMinOriginal;
-    double xMaxOriginal;
-    double yMinOriginal;
-    double yMaxOriginal;
+  double xOffset;
+  double yOffset;
+  double xMinOriginal;
+  double xMaxOriginal;
+  double yMinOriginal;
+  double yMaxOriginal;
 
-    bool initial_resize = true;
+  bool initial_resize = true;
 
-    QPoint mouseOriginal;
-    bool is_panning = false;
+  QPoint mouseOriginal;
+  bool is_panning = false;
 
-    friend class Function;
+  friend class Function;
 };
 
 #endif // GRAPHER_H

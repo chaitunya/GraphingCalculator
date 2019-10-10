@@ -8,23 +8,23 @@
 class Window;
 
 class EquationWidget : public QLineEdit {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    EquationWidget(Function *f, Window *window, Grapher *grapher, QWidget *parent = 0);
-    Function *getFunction() const;
+  EquationWidget(Function *f, Window *window, Grapher *grapher, QWidget *parent = 0);
+  Function *getFunction() const;
 
 private slots:
-    void updateFunction(const QString &text);
-    void addFunction();
+  void updateFunction(const QString &text);
+  void addFunction();
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
+  void keyPressEvent(QKeyEvent *event);
 
 private:
-    Function *func;
-    Grapher *grapher;
-    Window *window;
-    
+  Function *func;
+  Grapher *grapher;
+  Window *window;
+  
 
 };
 
