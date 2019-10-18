@@ -183,37 +183,42 @@ void Grapher::paintEvent(QPaintEvent *) {
       {
         f->graphIntegral(this, &painter);
       }
-      std::vector<QPointF> zeros = f->calculateZeros(xMin, xMax, (xMax - xMin) / width());
-      QPointF transformed;
-      painter.setPen(pointPen);
-      double z;
-      for (QPointF zero : zeros) {
-        transformed = QPointF(
-            (zero.x() - xMin) / (xMax - xMin) * width(),
-            height() - (zero.y() - yMin) / (yMax - yMin) * height());
-        if (0 <= transformed.y() && transformed.y() < height())
-          painter.drawPoint(transformed);
-        z = std::round(zero.x() * 1000) / 1000;
-        if (z == 0) z = 0;
-      }
+      
 
-      std::vector<QPointF> maxs = f->calculateRelMaxs(xMin, xMax, (xMax - xMin) / width());
-      for (QPointF max : maxs) {
-        transformed = QPointF(
-            (max.x() - xMin) / (xMax - xMin) * width(),
-            height() - (max.y() - yMin) / (yMax - yMin) * height());
-        if (0 <= transformed.y() && transformed.y() < height())
-          painter.drawPoint(transformed);
-      }
+      // // calculate zeros
+      // std::vector<QPointF> zeros = f->calculateZeros(xMin, xMax, (xMax - xMin) / width());
+      // QPointF transformed;
+      // painter.setPen(pointPen);
+      // double z;
+      // for (QPointF zero : zeros) {
+      //   transformed = QPointF(
+      //       (zero.x() - xMin) / (xMax - xMin) * width(),
+      //       height() - (zero.y() - yMin) / (yMax - yMin) * height());
+      //   if (0 <= transformed.y() && transformed.y() < height())
+      //     painter.drawPoint(transformed);
+      //   z = std::round(zero.x() * 1000) / 1000;
+      //   if (z == 0) z = 0;
+      // }
 
-      std::vector<QPointF> mins = f->calculateRelMins(xMin, xMax, (xMax - xMin) / width());
-      for (QPointF min : mins) {
-        transformed = QPointF(
-            (min.x() - xMin) / (xMax - xMin) * width(),
-            height() - (min.y() - yMin) / (yMax - yMin) * height());
-        if (0 <= transformed.y() && transformed.y() < height())
-          painter.drawPoint(transformed);
-      }
+      // // calculate relative maximums
+      // std::vector<QPointF> maxs = f->calculateRelMaxs(xMin, xMax, (xMax - xMin) / width());
+      // for (QPointF max : maxs) {
+      //   transformed = QPointF(
+      //       (max.x() - xMin) / (xMax - xMin) * width(),
+      //       height() - (max.y() - yMin) / (yMax - yMin) * height());
+      //   if (0 <= transformed.y() && transformed.y() < height())
+      //     painter.drawPoint(transformed);
+      // }
+
+      // // calculate relative minimums
+      // std::vector<QPointF> mins = f->calculateRelMins(xMin, xMax, (xMax - xMin) / width());
+      // for (QPointF min : mins) {
+      //   transformed = QPointF(
+      //       (min.x() - xMin) / (xMax - xMin) * width(),
+      //       height() - (min.y() - yMin) / (yMax - yMin) * height());
+      //   if (0 <= transformed.y() && transformed.y() < height())
+      //     painter.drawPoint(transformed);
+      // }
     }
   }
   

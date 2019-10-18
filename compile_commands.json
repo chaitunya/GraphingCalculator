@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/chaitu/Documents/GraphingCalculator",
+  "command": "/usr/bin/c++  -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/chaitu/Documents/GraphingCalculator/GraphingCalculator_autogen/include -I/home/chaitu/Documents/GraphingCalculator/include -I/usr/local/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui   -std=c++11 -g   -fPIC -std=gnu++11 -o CMakeFiles/GraphingCalculator.dir/src/main.cpp.o -c /home/chaitu/Documents/GraphingCalculator/src/main.cpp",
+  "file": "/home/chaitu/Documents/GraphingCalculator/src/main.cpp"
+},
+{
+  "directory": "/home/chaitu/Documents/GraphingCalculator",
+  "command": "/usr/bin/c++  -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/chaitu/Documents/GraphingCalculator/GraphingCalculator_autogen/include -I/home/chaitu/Documents/GraphingCalculator/include -I/usr/local/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui   -std=c++11 -g   -fPIC -std=gnu++11 -o CMakeFiles/GraphingCalculator.dir/src/window.cpp.o -c /home/chaitu/Documents/GraphingCalculator/src/window.cpp",
+  "file": "/home/chaitu/Documents/GraphingCalculator/src/window.cpp"
+},
+{
+  "directory": "/home/chaitu/Documents/GraphingCalculator",
+  "command": "/usr/bin/c++  -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/chaitu/Documents/GraphingCalculator/GraphingCalculator_autogen/include -I/home/chaitu/Documents/GraphingCalculator/include -I/usr/local/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui   -std=c++11 -g   -fPIC -std=gnu++11 -o CMakeFiles/GraphingCalculator.dir/src/grapher.cpp.o -c /home/chaitu/Documents/GraphingCalculator/src/grapher.cpp",
+  "file": "/home/chaitu/Documents/GraphingCalculator/src/grapher.cpp"
+},
+{
+  "directory": "/home/chaitu/Documents/GraphingCalculator",
+  "command": "/usr/bin/c++  -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/chaitu/Documents/GraphingCalculator/GraphingCalculator_autogen/include -I/home/chaitu/Documents/GraphingCalculator/include -I/usr/local/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui   -std=c++11 -g   -fPIC -std=gnu++11 -o CMakeFiles/GraphingCalculator.dir/src/function.cpp.o -c /home/chaitu/Documents/GraphingCalculator/src/function.cpp",
+  "file": "/home/chaitu/Documents/GraphingCalculator/src/function.cpp"
+},
+{
+  "directory": "/home/chaitu/Documents/GraphingCalculator",
+  "command": "/usr/bin/c++  -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/chaitu/Documents/GraphingCalculator/GraphingCalculator_autogen/include -I/home/chaitu/Documents/GraphingCalculator/include -I/usr/local/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui   -std=c++11 -g   -fPIC -std=gnu++11 -o CMakeFiles/GraphingCalculator.dir/src/equation_widget.cpp.o -c /home/chaitu/Documents/GraphingCalculator/src/equation_widget.cpp",
+  "file": "/home/chaitu/Documents/GraphingCalculator/src/equation_widget.cpp"
+},
+{
+  "directory": "/home/chaitu/Documents/GraphingCalculator",
+  "command": "/usr/bin/c++  -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/chaitu/Documents/GraphingCalculator/GraphingCalculator_autogen/include -I/home/chaitu/Documents/GraphingCalculator/include -I/usr/local/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui   -std=c++11 -g   -fPIC -std=gnu++11 -o CMakeFiles/GraphingCalculator.dir/GraphingCalculator_autogen/mocs_compilation.cpp.o -c /home/chaitu/Documents/GraphingCalculator/GraphingCalculator_autogen/mocs_compilation.cpp",
+  "file": "/home/chaitu/Documents/GraphingCalculator/GraphingCalculator_autogen/mocs_compilation.cpp"
+}
+]

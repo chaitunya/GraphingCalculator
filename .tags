@@ -292,15 +292,16 @@ EquationWidget	src/equation_widget.cpp	/^EquationWidget::EquationWidget(Function
 FUNCTION_H	include/function.h	2;"	d
 Function	include/function.h	/^class Function {$/;"	c
 Function	src/function.cpp	/^Function::Function(const char* expr)$/;"	f	class:Function
-Function	src/function.cpp	/^Function::Function(const char* expr, const QPen &pen)$/;"	f	class:Function
+Function	src/function.cpp	/^Function::Function(const char* expr, const QColor &color)$/;"	f	class:Function
 Function	src/function.cpp	/^Function::Function(mathfunc_t mathFunc)$/;"	f	class:Function
-Function	src/function.cpp	/^Function::Function(mathfunc_t mathFunc, const QPen &pen)$/;"	f	class:Function
+Function	src/function.cpp	/^Function::Function(mathfunc_t mathFunc, const QColor &color)$/;"	f	class:Function
 GRAPHER_H	include/grapher.h	2;"	d
 Grapher	include/grapher.h	/^class Grapher : public QWidget$/;"	c
 Grapher	src/grapher.cpp	/^Grapher::Grapher(std::vector<EquationWidget*> *eqWidgets, QWidget *parent)$/;"	f	class:Grapher
 HEX	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	483;"	d	file:
 HEX	CMakeFiles/3.10.2/CompilerIdCXX/CMakeCXXCompilerId.cpp	468;"	d	file:
 ID_VOID_MAIN	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	6;"	d	file:
+MIN_DIFF	src/function.cpp	7;"	d	file:
 PLATFORM_ID	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	313;"	d	file:
 PLATFORM_ID	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	316;"	d	file:
 PLATFORM_ID	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	319;"	d	file:
@@ -789,36 +790,47 @@ __unix	GraphingCalculator_autogen/moc_predefs.h	62;"	d
 __unix__	GraphingCalculator_autogen/moc_predefs.h	32;"	d
 __x86_64	GraphingCalculator_autogen/moc_predefs.h	36;"	d
 __x86_64__	GraphingCalculator_autogen/moc_predefs.h	228;"	d
-addFunction	src/equation_widget.cpp	/^void EquationWidget::addFunction()$/;"	f	class:EquationWidget
-addFunction	src/window.cpp	/^void Window::addFunction(EquationWidget *eqWidg)$/;"	f	class:Window
-addFunction	src/window.cpp	/^void Window::addFunction(int index)$/;"	f	class:Window
-b_graphDerivative	include/function.h	/^    bool b_graphDerivative = false;$/;"	m	class:Function
-b_graphIntegral	include/function.h	/^    bool b_graphIntegral = false;$/;"	m	class:Function
-brush	include/grapher.h	/^    QBrush brush;$/;"	m	class:Grapher
+addFunction	src/equation_widget.cpp	/^void EquationWidget::addFunction() {$/;"	f	class:EquationWidget
+addFunction	src/window.cpp	/^void Window::addFunction(EquationWidget *eqWidg) {$/;"	f	class:Window
+addFunction	src/window.cpp	/^void Window::addFunction(int index) {$/;"	f	class:Window
+b_graphDerivative	include/function.h	/^  bool b_graphDerivative = false;$/;"	m	class:Function
+b_graphIntegral	include/function.h	/^  bool b_graphIntegral = false;$/;"	m	class:Function
+brent	src/function.cpp	/^double Function::brent(mathmethod_t func, double xMin, double xMax, double min_diff) {$/;"	f	class:Function
+brush	include/grapher.h	/^  QBrush brush;$/;"	m	class:Grapher
+calculateRelExtrema	src/function.cpp	/^std::vector<QPointF> Function::calculateRelExtrema(double xMin, double xMax, double deltaX) {$/;"	f	class:Function
+calculateRelExtrema	src/function.cpp	/^std::vector<QPointF> Function::calculateRelExtrema(mathmethod_t func, double xMin, double xMax, double deltaX) {$/;"	f	class:Function
+calculateRelMaxs	src/function.cpp	/^std::vector<QPointF> Function::calculateRelMaxs(double xMin, double xMax, double deltaX) {$/;"	f	class:Function
+calculateRelMins	src/function.cpp	/^std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double deltaX) {$/;"	f	class:Function
+calculateSingleZeros	src/function.cpp	/^std::vector<QPointF> Function::calculateSingleZeros(mathmethod_t func, double xMin, double xMax, double deltaX) {$/;"	f	class:Function
+calculateVertAsymptotes	src/function.cpp	/^std::vector<QPointF> Function::calculateVertAsymptotes(double xMin, double xMax, double deltaX) {$/;"	f	class:Function
+calculateZeros	src/function.cpp	/^std::vector<QPointF> Function::calculateZeros(mathmethod_t func, double xMin, double xMax, double deltaX) {$/;"	f	class:Function
+color	include/function.h	/^  QColor color;$/;"	m	class:Function
 const	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	10;"	d	file:
 data	GraphingCalculator_autogen/6YEA5652QU/moc_equation_widget.cpp	/^    QByteArrayData data[5];$/;"	m	struct:qt_meta_stringdata_EquationWidget_t	file:
 data	GraphingCalculator_autogen/6YEA5652QU/moc_grapher.cpp	/^    QByteArrayData data[1];$/;"	m	struct:qt_meta_stringdata_Grapher_t	file:
 data	GraphingCalculator_autogen/6YEA5652QU/moc_window.cpp	/^    QByteArrayData data[1];$/;"	m	struct:qt_meta_stringdata_Window_t	file:
-delFunction	src/window.cpp	/^void Window::delFunction(EquationWidget *eqWidg)$/;"	f	class:Window
-deltaX	include/function.h	/^    double deltaX = 0.001;$/;"	m	class:Function
-deltaX	include/grapher.h	/^    double deltaX = 1;$/;"	m	class:Grapher
-derivative	src/function.cpp	/^double Function::derivative(double x)$/;"	f	class:Function
-equationWidgets	include/grapher.h	/^    std::vector<EquationWidget*> *equationWidgets;$/;"	m	class:Grapher
-equationWidgets	include/window.h	/^    std::vector<EquationWidget*> *equationWidgets;$/;"	m	class:Window
-equations_layout	include/window.h	/^    QVBoxLayout *equations_layout;$/;"	m	class:Window
-evaluateFunction	src/function.cpp	/^double Function::evaluateFunction(double x)$/;"	f	class:Function
+delFunction	src/window.cpp	/^void Window::delFunction(EquationWidget *eqWidg) {$/;"	f	class:Window
+deltaX	include/function.h	/^  double deltaX = 0.0001;$/;"	m	class:Function
+deltaX	include/grapher.h	/^  double deltaX = 1;$/;"	m	class:Grapher
+derivative	src/function.cpp	/^double Function::derivative(double x) {$/;"	f	class:Function
+derivative	src/function.cpp	/^double Function::derivative(mathmethod_t func, double x) {$/;"	f	class:Function
+discontinuityBetween	src/function.cpp	/^double Function::discontinuityBetween(double xMin, double xMax, double deltaX) {$/;"	f	class:Function
+equationWidgets	include/grapher.h	/^  std::vector<EquationWidget*> *equationWidgets;$/;"	m	class:Grapher
+equationWidgets	include/window.h	/^  std::vector<EquationWidget*> *equationWidgets;$/;"	m	class:Window
+equations_layout	include/window.h	/^  QVBoxLayout *equations_layout;$/;"	m	class:Window
+evaluateFunction	src/function.cpp	/^double Function::evaluateFunction(double x) {$/;"	f	class:Function
 features	CMakeFiles/feature_tests.c	/^  const char features[] = {"\\n"$/;"	v
 features	CMakeFiles/feature_tests.cxx	/^  const char features[] = {"\\n"$/;"	v
-func	include/equation_widget.h	/^    Function *func;$/;"	m	class:EquationWidget
-func	include/window.h	/^    Function *func;$/;"	m	struct:EquationPair
-getFunction	src/equation_widget.cpp	/^Function *EquationWidget::getFunction() const$/;"	f	class:EquationWidget
-getPxCoord	src/function.cpp	5;"	d	file:
-getValid	src/function.cpp	/^bool Function::getValid() const$/;"	f	class:Function
-graphDerivative	src/function.cpp	/^void Function::graphDerivative(Grapher *grapher, QPainter *painter)$/;"	f	class:Function
-graphFunction	src/function.cpp	/^void Function::graphFunction(Grapher *grapher, QPainter *painter)$/;"	f	class:Function
-graphIntegral	src/function.cpp	/^void Function::graphIntegral(Grapher *grapher, QPainter *painter)$/;"	f	class:Function
-grapher	include/equation_widget.h	/^    Grapher *grapher;$/;"	m	class:EquationWidget
-grapher	include/window.h	/^    Grapher *grapher;$/;"	m	class:Window
+func	include/equation_widget.h	/^  Function *func;$/;"	m	class:EquationWidget
+func	include/window.h	/^  Function *func;$/;"	m	struct:EquationPair
+getFunction	src/equation_widget.cpp	/^Function *EquationWidget::getFunction() const {$/;"	f	class:EquationWidget
+getValid	src/function.cpp	/^bool Function::getValid() const {$/;"	f	class:Function
+graphDerivative	src/function.cpp	/^void Function::graphDerivative(Grapher *grapher, QPainter *painter) {$/;"	f	class:Function
+graphFunction	src/function.cpp	/^void Function::graphFunction(Grapher *grapher, QPainter *painter) {$/;"	f	class:Function
+graphFunction	src/function.cpp	/^void Function::graphFunction(mathmethod_t func, Grapher *grapher, QPainter *painter) {$/;"	f	class:Function
+graphIntegral	src/function.cpp	/^void Function::graphIntegral(Grapher *grapher, QPainter *painter) {$/;"	f	class:Function
+grapher	include/equation_widget.h	/^  Grapher *grapher;$/;"	m	class:EquationWidget
+grapher	include/window.h	/^  Grapher *grapher;$/;"	m	class:Window
 info_arch	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	/^char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";$/;"	v
 info_arch	CMakeFiles/3.10.2/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";$/;"	v
 info_compiler	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	/^char const* info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";$/;"	v
@@ -837,43 +849,43 @@ info_version	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	/^char const info_
 info_version	CMakeFiles/3.10.2/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_version[] = {$/;"	v
 info_version_internal	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	/^char const info_version_internal[] = {$/;"	v
 info_version_internal	CMakeFiles/3.10.2/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_version_internal[] = {$/;"	v
-initial_resize	include/grapher.h	/^    bool initial_resize = true;$/;"	m	class:Grapher
-integral	src/function.cpp	/^double Function::integral(double a, double b)$/;"	f	class:Function
-integral0	src/function.cpp	/^double Function::integral0(double x)$/;"	f	class:Function
-isHidden	include/function.h	/^    bool isHidden = false;$/;"	m	class:Function
-is_panning	include/grapher.h	/^    bool is_panning = false;$/;"	m	class:Grapher
-is_parsed	include/function.h	/^    bool is_parsed;$/;"	m	class:Function
-is_valid	include/function.h	/^    bool is_valid;$/;"	m	class:Function
-keyPressEvent	src/equation_widget.cpp	/^void EquationWidget::keyPressEvent(QKeyEvent *event)$/;"	f	class:EquationWidget
+initial_resize	include/grapher.h	/^  bool initial_resize = true;$/;"	m	class:Grapher
+integral	src/function.cpp	/^double Function::integral(double a, double b) {$/;"	f	class:Function
+integral0	src/function.cpp	/^double Function::integral0(double x) {$/;"	f	class:Function
+isHidden	include/function.h	/^  bool isHidden = false;$/;"	m	class:Function
+is_panning	include/grapher.h	/^  bool is_panning = false;$/;"	m	class:Grapher
+is_parsed	include/function.h	/^  bool is_parsed;$/;"	m	class:Function
+is_valid	include/function.h	/^  bool is_valid;$/;"	m	class:Function
+keyPressEvent	src/equation_widget.cpp	/^void EquationWidget::keyPressEvent(QKeyEvent *event) {$/;"	f	class:EquationWidget
 linux	GraphingCalculator_autogen/moc_predefs.h	263;"	d
 main	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	/^int main(argc, argv) int argc; char *argv[];$/;"	f
 main	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	/^void main() {}$/;"	f
 main	CMakeFiles/3.10.2/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^int main(int argc, char* argv[])$/;"	f
 main	CMakeFiles/feature_tests.c	/^int main(int argc, char** argv) { (void)argv; return features[argc]; }$/;"	f
 main	CMakeFiles/feature_tests.cxx	/^int main(int argc, char** argv) { (void)argv; return features[argc]; }$/;"	f
-main	src/main.cpp	/^int main(int argc, char *argv[])$/;"	f
-mathFunc	include/function.h	/^    mathfunc_t mathFunc;$/;"	m	class:Function
-mathfunc_t	include/function.h	/^typedef double (*mathfunc_t)(double x);$/;"	t
+main	src/main.cpp	/^int main(int argc, char *argv[]) {$/;"	f
+mathFunc	include/function.h	/^  mathfunc_t mathFunc;$/;"	m	class:Function
+mathfunc_t	include/function.h	/^  typedef double(*mathfunc_t)(double);$/;"	t	class:Function
+mathmethod_t	include/function.h	/^  typedef double(Function::*mathmethod_t)(double);$/;"	t	class:Function
 metaObject	GraphingCalculator_autogen/6YEA5652QU/moc_equation_widget.cpp	/^const QMetaObject *EquationWidget::metaObject() const$/;"	f	class:EquationWidget
 metaObject	GraphingCalculator_autogen/6YEA5652QU/moc_grapher.cpp	/^const QMetaObject *Grapher::metaObject() const$/;"	f	class:Grapher
 metaObject	GraphingCalculator_autogen/6YEA5652QU/moc_window.cpp	/^const QMetaObject *Window::metaObject() const$/;"	f	class:Window
-minimumSizeHint	src/grapher.cpp	/^QSize Grapher::minimumSizeHint() const$/;"	f	class:Grapher
-mouseMoveEvent	src/grapher.cpp	/^void Grapher::mouseMoveEvent(QMouseEvent * event)$/;"	f	class:Grapher
-mouseOriginal	include/grapher.h	/^    QPoint mouseOriginal;$/;"	m	class:Grapher
-mousePressEvent	src/grapher.cpp	/^void Grapher::mousePressEvent(QMouseEvent * event)$/;"	f	class:Grapher
-mouseReleaseEvent	src/grapher.cpp	/^void Grapher::mouseReleaseEvent(QMouseEvent * event)$/;"	f	class:Grapher
-mpCtx	include/function.h	/^    mathpresso::Context mpCtx;$/;"	m	class:Function
-mpExpr	include/function.h	/^    mathpresso::Expression mpExpr;$/;"	m	class:Function
-override	include/grapher.h	/^    QSize minimumSizeHint() const override;$/;"	m	class:Grapher
-override	include/grapher.h	/^    QSize sizeHint() const override;$/;"	m	class:Grapher
-override	include/grapher.h	/^    void mouseMoveEvent(QMouseEvent *event) override;$/;"	m	class:Grapher
-override	include/grapher.h	/^    void mousePressEvent(QMouseEvent *event) override;$/;"	m	class:Grapher
-override	include/grapher.h	/^    void mouseReleaseEvent(QMouseEvent *event) override;$/;"	m	class:Grapher
-override	include/grapher.h	/^    void paintEvent(QPaintEvent *event) override;$/;"	m	class:Grapher
-override	include/grapher.h	/^    void resizeEvent(QResizeEvent *event) override;$/;"	m	class:Grapher
-override	include/grapher.h	/^    void wheelEvent(QWheelEvent *event) override;$/;"	m	class:Grapher
-paintEvent	src/grapher.cpp	/^void Grapher::paintEvent(QPaintEvent *)$/;"	f	class:Grapher
-pen	include/function.h	/^    QPen pen;$/;"	m	class:Function
+minimumSizeHint	src/grapher.cpp	/^QSize Grapher::minimumSizeHint() const {$/;"	f	class:Grapher
+mouseMoveEvent	src/grapher.cpp	/^void Grapher::mouseMoveEvent(QMouseEvent * event) {$/;"	f	class:Grapher
+mouseOriginal	include/grapher.h	/^  QPoint mouseOriginal;$/;"	m	class:Grapher
+mousePressEvent	src/grapher.cpp	/^void Grapher::mousePressEvent(QMouseEvent * event) {$/;"	f	class:Grapher
+mouseReleaseEvent	src/grapher.cpp	/^void Grapher::mouseReleaseEvent(QMouseEvent * event) {$/;"	f	class:Grapher
+mpCtx	include/function.h	/^  mathpresso::Context mpCtx;$/;"	m	class:Function
+mpExpr	include/function.h	/^  mathpresso::Expression mpExpr;$/;"	m	class:Function
+override	include/grapher.h	/^  QSize minimumSizeHint() const override;$/;"	m	class:Grapher
+override	include/grapher.h	/^  QSize sizeHint() const override;$/;"	m	class:Grapher
+override	include/grapher.h	/^  void mouseMoveEvent(QMouseEvent *event) override;$/;"	m	class:Grapher
+override	include/grapher.h	/^  void mousePressEvent(QMouseEvent *event) override;$/;"	m	class:Grapher
+override	include/grapher.h	/^  void mouseReleaseEvent(QMouseEvent *event) override;$/;"	m	class:Grapher
+override	include/grapher.h	/^  void paintEvent(QPaintEvent *event) override;$/;"	m	class:Grapher
+override	include/grapher.h	/^  void resizeEvent(QResizeEvent *event) override;$/;"	m	class:Grapher
+override	include/grapher.h	/^  void wheelEvent(QWheelEvent *event) override;$/;"	m	class:Grapher
+paintEvent	src/grapher.cpp	/^void Grapher::paintEvent(QPaintEvent *) {$/;"	f	class:Grapher
 qnxnto	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	/^char const* qnxnto = "INFO" ":" "qnxnto[]";$/;"	v
 qnxnto	CMakeFiles/3.10.2/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* qnxnto = "INFO" ":" "qnxnto[]";$/;"	v
 qt_meta_data_EquationWidget	GraphingCalculator_autogen/6YEA5652QU/moc_equation_widget.cpp	/^static const uint qt_meta_data_EquationWidget[] = {$/;"	v	file:
@@ -894,10 +906,10 @@ qt_metacast	GraphingCalculator_autogen/6YEA5652QU/moc_window.cpp	/^void *Window:
 qt_static_metacall	GraphingCalculator_autogen/6YEA5652QU/moc_equation_widget.cpp	/^void EquationWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)$/;"	f	class:EquationWidget
 qt_static_metacall	GraphingCalculator_autogen/6YEA5652QU/moc_grapher.cpp	/^void Grapher::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)$/;"	f	class:Grapher
 qt_static_metacall	GraphingCalculator_autogen/6YEA5652QU/moc_window.cpp	/^void Window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)$/;"	f	class:Window
-resizeEvent	src/grapher.cpp	/^void Grapher::resizeEvent(QResizeEvent *event)$/;"	f	class:Grapher
-scrollArea	include/window.h	/^    QScrollArea *scrollArea;$/;"	m	class:Window
-setText	src/function.cpp	/^void Function::setText(const char* expr)$/;"	f	class:Function
-sizeHint	src/grapher.cpp	/^QSize Grapher::sizeHint() const$/;"	f	class:Grapher
+resizeEvent	src/grapher.cpp	/^void Grapher::resizeEvent(QResizeEvent *event) {$/;"	f	class:Grapher
+scrollArea	include/window.h	/^  QScrollArea *scrollArea;$/;"	m	class:Window
+setText	src/function.cpp	/^void Function::setText(const char* expr) {$/;"	f	class:Function
+sizeHint	src/grapher.cpp	/^QSize Grapher::sizeHint() const {$/;"	f	class:Grapher
 staticMetaObject	GraphingCalculator_autogen/6YEA5652QU/moc_equation_widget.cpp	/^const QMetaObject EquationWidget::staticMetaObject = {$/;"	m	class:EquationWidget	file:
 staticMetaObject	GraphingCalculator_autogen/6YEA5652QU/moc_grapher.cpp	/^const QMetaObject Grapher::staticMetaObject = {$/;"	m	class:Grapher	file:
 staticMetaObject	GraphingCalculator_autogen/6YEA5652QU/moc_window.cpp	/^const QMetaObject Window::staticMetaObject = {$/;"	m	class:Window	file:
@@ -905,18 +917,18 @@ stringdata0	GraphingCalculator_autogen/6YEA5652QU/moc_equation_widget.cpp	/^    
 stringdata0	GraphingCalculator_autogen/6YEA5652QU/moc_grapher.cpp	/^    char stringdata0[8];$/;"	m	struct:qt_meta_stringdata_Grapher_t	file:
 stringdata0	GraphingCalculator_autogen/6YEA5652QU/moc_window.cpp	/^    char stringdata0[7];$/;"	m	struct:qt_meta_stringdata_Window_t	file:
 unix	GraphingCalculator_autogen/moc_predefs.h	207;"	d
-updateFunction	src/equation_widget.cpp	/^void EquationWidget::updateFunction(const QString &text)$/;"	f	class:EquationWidget
+updateFunction	src/equation_widget.cpp	/^void EquationWidget::updateFunction(const QString &text) {$/;"	f	class:EquationWidget
 volatile	CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c	11;"	d	file:
-wheelEvent	src/grapher.cpp	/^void Grapher::wheelEvent(QWheelEvent * event)$/;"	f	class:Grapher
-widget	include/window.h	/^    EquationWidget *widget;$/;"	m	struct:EquationPair
-window	include/equation_widget.h	/^    Window *window;$/;"	m	class:EquationWidget
-xMax	include/grapher.h	/^    double xMax = 10;$/;"	m	class:Grapher
-xMaxOriginal	include/grapher.h	/^    double xMaxOriginal;$/;"	m	class:Grapher
-xMin	include/grapher.h	/^    double xMin = -10;$/;"	m	class:Grapher
-xMinOriginal	include/grapher.h	/^    double xMinOriginal;$/;"	m	class:Grapher
-xOffset	include/grapher.h	/^    double xOffset;$/;"	m	class:Grapher
-yMax	include/grapher.h	/^    double yMax = 10;$/;"	m	class:Grapher
-yMaxOriginal	include/grapher.h	/^    double yMaxOriginal;$/;"	m	class:Grapher
-yMin	include/grapher.h	/^    double yMin = -10;$/;"	m	class:Grapher
-yMinOriginal	include/grapher.h	/^    double yMinOriginal;$/;"	m	class:Grapher
-yOffset	include/grapher.h	/^    double yOffset;$/;"	m	class:Grapher
+wheelEvent	src/grapher.cpp	/^void Grapher::wheelEvent(QWheelEvent * event) {$/;"	f	class:Grapher
+widget	include/window.h	/^  EquationWidget *widget;$/;"	m	struct:EquationPair
+window	include/equation_widget.h	/^  Window *window;$/;"	m	class:EquationWidget
+xMax	include/grapher.h	/^  double xMax = 10;$/;"	m	class:Grapher
+xMaxOriginal	include/grapher.h	/^  double xMaxOriginal;$/;"	m	class:Grapher
+xMin	include/grapher.h	/^  double xMin = -10;$/;"	m	class:Grapher
+xMinOriginal	include/grapher.h	/^  double xMinOriginal;$/;"	m	class:Grapher
+xOffset	include/grapher.h	/^  double xOffset;$/;"	m	class:Grapher
+yMax	include/grapher.h	/^  double yMax = 10;$/;"	m	class:Grapher
+yMaxOriginal	include/grapher.h	/^  double yMaxOriginal;$/;"	m	class:Grapher
+yMin	include/grapher.h	/^  double yMin = -10;$/;"	m	class:Grapher
+yMinOriginal	include/grapher.h	/^  double yMinOriginal;$/;"	m	class:Grapher
+yOffset	include/grapher.h	/^  double yOffset;$/;"	m	class:Grapher
