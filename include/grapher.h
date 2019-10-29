@@ -37,10 +37,10 @@ protected:
 private:
   std::vector<EquationWidget*> *equationWidgets;
   QBrush brush;
-  double xMin = -10;
-  double xMax = 10;
-  double yMin = -10;
-  double yMax = 10;
+  double xMin = -11;
+  double xMax = 11;
+  double yMin = -11;
+  double yMax = 11;
   double deltaX = 1;
 
   double xOffset;

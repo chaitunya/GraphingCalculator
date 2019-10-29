@@ -3,8 +3,10 @@
 #include <iostream>
 #include <limits>
 #include <cmath>
+#include <cstring>
 
 #define MIN_DIFF 0.0001
+
 
 Function::Function(mathfunc_t mathFunc)
   : color(0, 0, 0), mathFunc(mathFunc), is_parsed(false), is_valid(true) {
@@ -14,27 +16,41 @@ Function::Function(mathfunc_t mathFunc, const QColor &color)
   : color(color), mathFunc(mathFunc), is_parsed(false), is_valid(true) {
 }
 
-Function::Function(const char* expr)
-  : color(0, 0, 0), mpCtx(), mpExpr(), is_parsed(true) {
-  mpCtx.addBuiltIns();
-  mpCtx.addVariable("x", 0); // add var to first position in container
+Function::Function(const char *expr)
+  : color(0, 0, 0), is_parsed(true) {
   setText(expr);
 }
 
 
-Function::Function(const char* expr, const QColor &color)
-  : color(color), mpCtx(), mpExpr(), is_parsed(true) {
-  mpCtx.addBuiltIns();
-  mpCtx.addVariable("x", 0); // add var to first position in container
+Function::Function(const char *expr, const QColor &color)
+  : color(color), is_parsed(true) {
   setText(expr);
 }
 
-void Function::setText(const char* expr) {
-  mathpresso::Error err = mpExpr.compile(mpCtx, expr, mathpresso::kNoOptions);
-  if (err != mathpresso::kErrorOk) {
-    is_valid = false;
-  } else {
-    is_valid = true;
+void Function::setText(const char *expr) {
+  // Remove and replace evaluator
+  if (evaluator)
+    evaluator_destroy(evaluator);
+  // Need to convert copy const char* to char* to use input
+  // for evaluator_create, which for some reason requires only char*
+  char* mod_string = new char[std::strlen(expr) + 1];
+  std::strcpy(mod_string, expr);
+  evaluator = evaluator_create(mod_string);
+  int count;
+  char **names;
+  delete[] mod_string;
+  is_valid = evaluator; // returns NULL value of invalid
+  if (is_valid) {
+    // Make sure that only variable referenced is x
+    evaluator_get_variables(evaluator, &names, &count);
+    switch (count) {
+      case 1:
+        if (strcmp(names[0], "x") != 0)
+          is_valid = false;
+        break;
+      case 0: break;
+      default: is_valid = false;
+    }
   }
 }
 
@@ -63,20 +79,23 @@ double Function::integral0(double x) {
 }
 
 void Function::graphFunction(mathmethod_t func, Grapher *grapher, QPainter *painter) {
-  QPen new_pen = painter->pen();
+  QPen new_pen(painter->pen());
   new_pen.setColor(color);
   painter->setPen(new_pen);
   QPainterPath path;
   double coord_x;
   double coord_y;
   double px_y;
+  std::cout << painter->pen().color().red() << painter->pen().color().blue() << painter->pen().color().green() << std::endl;
   for (int px_x = 0; px_x < grapher->width(); px_x++) {
     coord_x = px_x * (grapher->xMax - grapher->xMin) / grapher->width() + grapher->xMin;
     coord_y = (this->*func)(coord_x);
     px_y = grapher->height() - ((coord_y - grapher->yMin) / (grapher->yMax - grapher->yMin) * grapher->height());
     if (discontinuityBetween(coord_x - (grapher->xMax - grapher->xMin) / grapher->width(),
-          coord_x, (grapher->xMax - grapher->xMin) / grapher->width()))
+          coord_x, (grapher->xMax - grapher->xMin) / grapher->width())) {
       path.moveTo(px_x, px_y);
+      std::cout << "moving" << std::endl;
+    }
     else
       path.lineTo(px_x, px_y);
   }
@@ -98,7 +117,7 @@ void Function::graphDerivative(Grapher *grapher, QPainter *painter) {
 
 double Function::evaluateFunction(double x) {
   if (is_parsed) {
-    return mpExpr.evaluate(&x);
+    return evaluator_evaluate_x(evaluator, x);
   } else {
     return mathFunc(x);
   }
@@ -303,14 +322,13 @@ std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double
   return mins;
 }
 
-std::vector<QPointF> Function::calculateVertAsymptotes(double xMin, double xMax, double deltaX) {
-  std::vector<QPointF> asys;
+std::vector<double> Function::calculateVertAsymptotes(double xMin, double xMax, double deltaX) {
+  std::vector<double> asys;
   double f_xLeft;
   double f_xRight;
   double xLeft;
   double xRight;
-  QPointF asy;
-  // calculateSingleZeros(xMin, xMax, deltaX);
+  double asy;
   for (double x = xMin; x < xMax; x += deltaX) {
     xLeft = x;
     xRight = x + deltaX;
@@ -320,17 +338,64 @@ std::vector<QPointF> Function::calculateVertAsymptotes(double xMin, double xMax,
         (f_xLeft < 0 && f_xRight < 0)) {
       continue;
     } else {
-      asy = QPoint();
-      asy.setX(brent(&Function::evaluateFunction, xLeft, xRight, MIN_DIFF));
-      asy.setY(evaluateFunction(asy.x()));
+      asy = brent(&Function::evaluateFunction, xLeft, xRight, MIN_DIFF);
       asys.push_back(asy);
     }
   }
   return asys;
 }
 
-
 bool Function::discontinuityBetween(double xMin, double xMax, double deltaX) {
-  auto vertAsys = calculateVertAsymptotes(xMin, xMax, deltaX);
+   auto zeros = calculateSingleZeros(&Function::evaluateFunction, xMin, xMax, deltaX);
+   double zero;
+   double lim;
+   for (QPointF pt : zeros) {
+     zero = pt.x();
+     lim = limitAt(&Function::evaluateFunction, zero, 0.01, 0.5);
+     if (fabs(zero) <= 0.5)
+       std::cout << "zero at " << zero << " has a limit at " << lim;
+     if (std::isnan(lim)) {
+       std::cout << " which is nan" << std::endl;
+       return true;
+     }
+     std::cout << std::endl;
+   }
   return false;
+}
+
+double Function::limitAt(mathmethod_t func, double x, double deltaX, double max_diff) {
+  double leftLim = leftLimitAt(func, x, deltaX / 2, deltaX, max_diff);
+  double rightLim = rightLimitAt(func, x, deltaX / 2, deltaX, max_diff);
+  if (abs(leftLim - rightLim) <= 2 * max_diff)
+    return (rightLim + leftLim) / 2; // get average of both limits
+  else
+    return NAN; // Equivalent to DNE
+}
+
+double Function::leftLimitAt(mathmethod_t func, double x, double deltaX1, double deltaX2, double max_diff) {
+  double f_dx1 = (this->*func)(x - deltaX1);
+  double f_dx2 = (this->*func)(x - deltaX2);
+  if (!std::isinf(f_dx1) && !std::isinf(f_dx2)
+      && !std::isinf(f_dx1) && !std::isinf(f_dx2)
+      && abs(f_dx1 - f_dx2) <= max_diff)
+    return f_dx1;
+  else
+    return NAN;
+}
+
+double Function::rightLimitAt(mathmethod_t func, double x, double deltaX1, double deltaX2, double max_diff) {
+  double f_dx1 = (this->*func)(x + deltaX1);
+  double f_dx2 = (this->*func)(x + deltaX2);
+  if (!std::isinf(f_dx1) && !std::isinf(f_dx2)
+      && !std::isinf(f_dx1) && !std::isinf(f_dx2)
+      && abs(f_dx1 - f_dx2) <= max_diff)
+    return f_dx1;
+  else
+    return NAN;
+}
+double Function::reciprocal(double x) {
+  return 1 / evaluateFunction(x);
+}
+void Function::setColor(const QColor &new_color) {
+  color = QColor(new_color);
 }

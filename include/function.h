@@ -2,7 +2,7 @@
 #define FUNCTION_H
 
 #include <functional>
-#include <mathpresso/mathpresso.h>
+#include <matheval.h>
 #include <QColor>
 #include <QPainter>
 
@@ -14,11 +14,11 @@ class Function {
   typedef double(Function::*mathmethod_t)(double);
 
 public:
-  Function(mathfunc_t mathFunc);
+  explicit Function(mathfunc_t mathFunc);
   Function(mathfunc_t mathFunc, const QColor &color);
-  Function(const char* expr);
-  Function(const char* expr, const QColor &color);
-  void setText(const char* expr);
+  explicit Function(const char *expr);
+  Function(const char *expr, const QColor &color);
+  void setText(const char *expr);
   
   // evaluateFunction and operations on Function
   double evaluateFunction(double x);
@@ -33,7 +33,7 @@ public:
   void graphDerivative(Grapher *grapher, QPainter *painter);
 
   // Getters and setters
-  void setColor(const QColor &color);
+  void setColor(const QColor &new_color);
   bool getValid() const;
 
   // hidden bools
@@ -48,8 +48,11 @@ public:
   std::vector<QPointF> calculateRelMaxs(double xMin, double xMax, double deltaX);
   std::vector<QPointF> calculateRelExtrema(double xMin, double xMax, double deltaX);
   std::vector<QPointF> calculateRelExtrema(mathmethod_t func, double xMin, double xMax, double deltaX);
-  std::vector<QPointF> calculateVertAsymptotes(double xMin, double xMax, double deltaX);
+  std::vector<double> calculateVertAsymptotes(double xMin, double xMax, double deltaX);
   bool discontinuityBetween(double xMin, double xMax, double deltaX);
+  double limitAt(mathmethod_t func, double x, double deltaX, double max_diff);
+  double leftLimitAt(mathmethod_t func, double x, double deltaX1, double deltaX2, double max_diff);
+  double rightLimitAt(mathmethod_t func, double x, double deltaX1, double deltaX2, double max_diff);
 
 private:
   // Base graphFunction
@@ -59,9 +62,11 @@ private:
   double brent(mathmethod_t func, double xMin, double xMax, double min_diff);
 
   QColor color;
-  mathpresso::Context mpCtx;
-  mathpresso::Expression mpExpr;
   mathfunc_t mathFunc;
+
+  // parser utilities
+  void *evaluator = 0;
+
   double integral0(double x);
   double deltaX = 0.0001;
   bool is_parsed;

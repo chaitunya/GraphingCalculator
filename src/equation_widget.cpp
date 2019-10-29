@@ -2,6 +2,8 @@
 #include "grapher.h"
 #include "window.h"
 #include <iostream>
+#include <memory>
+#include <cstring>
 
 
 EquationWidget::EquationWidget(Function *f, Window *window, Grapher *grapher, QWidget *parent)
@@ -11,8 +13,9 @@ EquationWidget::EquationWidget(Function *f, Window *window, Grapher *grapher, QW
 }
 
 void EquationWidget::updateFunction(const QString &text) {
-  const char* t = text.toStdString().c_str();
-  func->setText(t);
+  QByteArray ba = text.toLocal8Bit();
+  const char *c_str = ba.data();
+  func->setText(c_str);
   grapher->update();
 }
 
