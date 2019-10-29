@@ -6,3 +6,7 @@ cmake_install.cmake
 GraphingCalculator_autogen/**
 CMakeFiles/**
 compile_commands.json
+.clangd
+.clang-format
+.idea
+GraphingCalculator.cbp
