@@ -78,62 +78,6 @@ double Function::integral0(double x) {
   return integral(0, x);
 }
 
-void Function::graphFunction(mathmethod_t func, Grapher *grapher, QPainter *painter) {
-  QPen new_pen(painter->pen());
-  new_pen.setColor(color);
-  painter->setPen(new_pen);
-  QPainterPath path;
-  double coord_x;
-  double coord_y;
-  double px_y;
-  bool out_of_bounds_top = false, out_of_bounds_bot = false;
-  for (int px_x = 0; px_x < grapher->width(); px_x++) {
-    coord_x = px_x * (grapher->xMax - grapher->xMin) / grapher->width() + grapher->xMin;
-    coord_y = (this->*func)(coord_x);
-    px_y = grapher->height() - ((coord_y - grapher->yMin) / (grapher->yMax - grapher->yMin) * grapher->height());
-    if (discontinuityBetween(coord_x - (grapher->xMax - grapher->xMin) / grapher->width(),
-                             coord_x, (grapher->xMax - grapher->xMin) / grapher->width())) {
-      path.moveTo(px_x, px_y);
-    } else if (px_x < 0) {
-      path.moveTo(0, px_y);
-    } else if (px_x > grapher->width()) {
-      path.lineTo(grapher->width() - 1, px_y);
-    } else if (px_y >= grapher->height()) {
-      if (out_of_bounds_bot) {
-        path.moveTo(px_x, grapher->height() - 1);
-      } else {
-        path.lineTo(px_x, grapher->height() - 1);
-        out_of_bounds_bot = true;
-        out_of_bounds_top = false;
-      }
-    } else if (px_y < 0) {
-      if (out_of_bounds_top) {
-        path.moveTo(px_x, 0);
-      } else {
-        path.lineTo(px_x, 0);
-        out_of_bounds_top = true;
-        out_of_bounds_bot = false;
-      }
-    } else {
-      path.lineTo(px_x, px_y);
-    }
-  }
-  painter->drawPath(path);
-}
-
-void Function::graphFunction(Grapher *grapher, QPainter *painter) {
-  graphFunction(&Function::evaluateFunction, grapher, painter);
-}
-
-void Function::graphIntegral(Grapher *grapher, QPainter *painter) {
-  graphFunction(&Function::integral0, grapher, painter);
-}
-
-void Function::graphDerivative(Grapher *grapher, QPainter *painter) {
-  graphFunction(&Function::derivative, grapher, painter);
-}
-
-
 double Function::evaluateFunction(double x) {
   if (is_parsed) {
     return evaluator_evaluate_x(evaluator, x);
@@ -364,13 +308,13 @@ std::vector<double> Function::calculateVertAsymptotes(double xMin, double xMax, 
   return asys;
 }
 
-bool Function::discontinuityBetween(double xMin, double xMax, double deltaX) {
-   auto zeros = calculateSingleZeros(&Function::evaluateFunction, xMin, xMax, deltaX);
+bool Function::discontinuityBetween(mathmethod_t func, double xMin, double xMax, double deltaX) {
+   auto zeros = calculateSingleZeros(func, xMin, xMax, deltaX);
    double zero;
    double lim;
    for (QPointF pt : zeros) {
      zero = pt.x();
-     lim = limitAt(&Function::evaluateFunction, zero, 0.01, 0.5);
+     lim = limitAt(func, zero, 0.01, 0.5);
      if (std::isnan(lim))
        return true;
    }
@@ -412,4 +356,8 @@ double Function::reciprocal(double x) {
 }
 void Function::setColor(const QColor &new_color) {
   color = QColor(new_color);
+}
+
+QColor Function::getColor() const {
+  return color;
 }

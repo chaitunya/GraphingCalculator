@@ -36,6 +36,7 @@ protected:
 
 private:
   std::vector<EquationWidget*> *equationWidgets;
+  void graphFunction(QPainter *painter, Function *F, mathmethod_t func);
   QBrush brush;
   double xMin = -11;
   double xMax = 11;
@@ -56,6 +57,7 @@ private:
   bool is_panning = false;
 
   friend class Function;
+
 };
 
 #endif // GRAPHER_H

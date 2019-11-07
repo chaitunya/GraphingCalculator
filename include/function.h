@@ -8,32 +8,31 @@
 
 class Grapher;
 
+class Function;
+
+typedef double(Function::*mathmethod_t)(double);
+typedef double(*mathfunc_t)(double);
 
 class Function {
-  typedef double(*mathfunc_t)(double);
-  typedef double(Function::*mathmethod_t)(double);
-
 public:
   explicit Function(mathfunc_t mathFunc);
   Function(mathfunc_t mathFunc, const QColor &color);
   explicit Function(const char *expr);
   Function(const char *expr, const QColor &color);
   void setText(const char *expr);
-  
+
+
   // evaluateFunction and operations on Function
   double evaluateFunction(double x);
   double derivative(double x);
   double derivative(mathmethod_t func, double x);
   double integral(double a, double b);
+  double integral0(double x);
   double reciprocal(double x);
-
-  // Graphing Utilities
-  void graphFunction(Grapher *grapher, QPainter *painter);
-  void graphIntegral(Grapher *grapher, QPainter *painter);
-  void graphDerivative(Grapher *grapher, QPainter *painter);
 
   // Getters and setters
   void setColor(const QColor &new_color);
+  QColor getColor() const;
   bool getValid() const;
 
   // hidden bools
@@ -49,7 +48,7 @@ public:
   std::vector<QPointF> calculateRelExtrema(double xMin, double xMax, double deltaX);
   std::vector<QPointF> calculateRelExtrema(mathmethod_t func, double xMin, double xMax, double deltaX);
   std::vector<double> calculateVertAsymptotes(double xMin, double xMax, double deltaX);
-  bool discontinuityBetween(double xMin, double xMax, double deltaX);
+  bool discontinuityBetween(mathmethod_t func, double xMin, double xMax, double deltaX);
   double limitAt(mathmethod_t func, double x, double deltaX, double max_diff);
   double leftLimitAt(mathmethod_t func, double x, double deltaX1, double deltaX2, double max_diff);
   double rightLimitAt(mathmethod_t func, double x, double deltaX1, double deltaX2, double max_diff);
@@ -67,11 +66,10 @@ private:
   // parser utilities
   void *evaluator = 0;
 
-  double integral0(double x);
   double deltaX = 0.0001;
   bool is_parsed;
   bool is_valid;
-  
+
 };
 
 #endif

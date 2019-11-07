@@ -29,9 +29,7 @@ void Grapher::paintEvent(QPaintEvent *) {
 
   // graph axes
   
-  QPen ax_pen;
-  ax_pen.setWidth(2);
-  
+  QPen ax_pen; ax_pen.setWidth(2);
   if (xMin < 0 && 0 < xMax) {
     painter.setPen(ax_pen);
     int p = -xMin / (xMax - xMin) * width();
@@ -161,49 +159,13 @@ void Grapher::paintEvent(QPaintEvent *) {
     Function *f = eqWidg->getFunction();
     if (!f->isHidden && f->getValid()) {
       painter.setPen(linePen);
-      f->graphFunction(this, &painter);
+      graphFunction(&painter, f, &Function::evaluateFunction);
       if (f->b_graphDerivative) {
-        f->graphDerivative(this, &painter);
+        graphFunction(&painter, f, &Function::derivative);
       }
       if (f->b_graphIntegral) {
-        f->graphIntegral(this, &painter);
+        graphFunction(&painter, f, &Function::integral0);
       }
-      
-
-      // // calculate zeros
-      // std::vector<QPointF> zeros = f->calculateZeros(xMin, xMax, (xMax - xMin) / width());
-      // QPointF transformed;
-      // painter.setPen(pointPen);
-      // double z;
-      // for (QPointF zero : zeros) {
-      //   transformed = QPointF(
-      //       (zero.x() - xMin) / (xMax - xMin) * width(),
-      //       height() - (zero.y() - yMin) / (yMax - yMin) * height());
-      //   if (0 <= transformed.y() && transformed.y() < height())
-      //     painter.drawPoint(transformed);
-      //   z = std::round(zero.x() * 1000) / 1000;
-      //   if (z == 0) z = 0;
-      // }
-
-      // // calculate relative maximums
-      // std::vector<QPointF> maxs = f->calculateRelMaxs(xMin, xMax, (xMax - xMin) / width());
-      // for (QPointF max : maxs) {
-      //   transformed = QPointF(
-      //       (max.x() - xMin) / (xMax - xMin) * width(),
-      //       height() - (max.y() - yMin) / (yMax - yMin) * height());
-      //   if (0 <= transformed.y() && transformed.y() < height())
-      //     painter.drawPoint(transformed);
-      // }
-
-      // // calculate relative minimums
-      // std::vector<QPointF> mins = f->calculateRelMins(xMin, xMax, (xMax - xMin) / width());
-      // for (QPointF min : mins) {
-      //   transformed = QPointF(
-      //       (min.x() - xMin) / (xMax - xMin) * width(),
-      //       height() - (min.y() - yMin) / (yMax - yMin) * height());
-      //   if (0 <= transformed.y() && transformed.y() < height())
-      //     painter.drawPoint(transformed);
-      // }
     }
   }
 
@@ -270,3 +232,47 @@ void Grapher::resizeEvent(QResizeEvent *event) {
     initial_resize = false;
   }
 }
+
+void Grapher::graphFunction(QPainter* painter, Function* F, mathmethod_t func) {
+  QPen new_pen(painter->pen());
+  new_pen.setColor(F->getColor());
+  painter->setPen(new_pen);
+  QPainterPath path;
+  double coord_x;
+  double coord_y;
+  double px_y;
+  bool out_of_bounds_top = false, out_of_bounds_bot = false;
+  for (int px_x = 0; px_x < width(); px_x++) {
+    coord_x = px_x * (xMax - xMin) / width() + xMin;
+    coord_y = (F->*func)(coord_x);
+    px_y = height() - ((coord_y - yMin) / (yMax - yMin) * height());
+    if (F->discontinuityBetween(func, coord_x - (xMax - xMin) / width(),
+                                coord_x, (xMax - xMin) / width())) {
+      path.moveTo(px_x, px_y);
+    } else if (px_x < 0) {
+      path.moveTo(0, px_y);
+    } else if (px_x > width()) {
+      path.lineTo(width() - 1, px_y);
+    } else if (px_y >= height()) {
+      if (out_of_bounds_bot) {
+        path.moveTo(px_x, height() - 1);
+      } else {
+        path.lineTo(px_x, height() - 1);
+        out_of_bounds_bot = true;
+        out_of_bounds_top = false;
+      }
+    } else if (px_y < 0) {
+      if (out_of_bounds_top) {
+        path.moveTo(px_x, 0);
+      } else {
+        path.lineTo(px_x, 0);
+        out_of_bounds_top = true;
+        out_of_bounds_bot = false;
+      }
+    } else {
+      path.lineTo(px_x, px_y);
+    }
+  }
+  painter->drawPath(path);
+}
+
