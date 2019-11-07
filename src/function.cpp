@@ -86,18 +86,37 @@ void Function::graphFunction(mathmethod_t func, Grapher *grapher, QPainter *pain
   double coord_x;
   double coord_y;
   double px_y;
-  std::cout << painter->pen().color().red() << painter->pen().color().blue() << painter->pen().color().green() << std::endl;
+  bool out_of_bounds_top = false, out_of_bounds_bot = false;
   for (int px_x = 0; px_x < grapher->width(); px_x++) {
     coord_x = px_x * (grapher->xMax - grapher->xMin) / grapher->width() + grapher->xMin;
     coord_y = (this->*func)(coord_x);
     px_y = grapher->height() - ((coord_y - grapher->yMin) / (grapher->yMax - grapher->yMin) * grapher->height());
     if (discontinuityBetween(coord_x - (grapher->xMax - grapher->xMin) / grapher->width(),
-          coord_x, (grapher->xMax - grapher->xMin) / grapher->width())) {
+                             coord_x, (grapher->xMax - grapher->xMin) / grapher->width())) {
       path.moveTo(px_x, px_y);
-      std::cout << "moving" << std::endl;
-    }
-    else
+    } else if (px_x < 0) {
+      path.moveTo(0, px_y);
+    } else if (px_x > grapher->width()) {
+      path.lineTo(grapher->width() - 1, px_y);
+    } else if (px_y >= grapher->height()) {
+      if (out_of_bounds_bot) {
+        path.moveTo(px_x, grapher->height() - 1);
+      } else {
+        path.lineTo(px_x, grapher->height() - 1);
+        out_of_bounds_bot = true;
+        out_of_bounds_top = false;
+      }
+    } else if (px_y < 0) {
+      if (out_of_bounds_top) {
+        path.moveTo(px_x, 0);
+      } else {
+        path.lineTo(px_x, 0);
+        out_of_bounds_top = true;
+        out_of_bounds_bot = false;
+      }
+    } else {
       path.lineTo(px_x, px_y);
+    }
   }
   painter->drawPath(path);
 }
@@ -352,13 +371,8 @@ bool Function::discontinuityBetween(double xMin, double xMax, double deltaX) {
    for (QPointF pt : zeros) {
      zero = pt.x();
      lim = limitAt(&Function::evaluateFunction, zero, 0.01, 0.5);
-     if (fabs(zero) <= 0.5)
-       std::cout << "zero at " << zero << " has a limit at " << lim;
-     if (std::isnan(lim)) {
-       std::cout << " which is nan" << std::endl;
+     if (std::isnan(lim))
        return true;
-     }
-     std::cout << std::endl;
    }
   return false;
 }
