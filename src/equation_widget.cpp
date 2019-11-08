@@ -7,12 +7,13 @@
 
 
 EquationWidget::EquationWidget(Function *f, Window *window, Grapher *grapher, QWidget *parent)
-  : QLineEdit(parent), func(f), grapher(grapher), window(window) {
+  : QWidget(parent), func(f), grapher(grapher), window(window) {
   connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(updateFunction(const QString&)));
   connect(this, SIGNAL(returnPressed()), this, SLOT(addFunction()));
 }
 
 void EquationWidget::updateFunction(const QString &text) {
+  std::cout << text.toStdString() << std::endl;
   QByteArray ba = text.toLocal8Bit();
   const char *c_str = ba.data();
   func->setText(c_str);
@@ -29,8 +30,19 @@ Function *EquationWidget::getFunction() const {
 }
 
 void EquationWidget::keyPressEvent(QKeyEvent *event) {
-  if (event->key() == Qt::Key_Backspace && text() == QString(""))
+  if (event->key() == Qt::Key_Backspace && text() == QString("")) {
     window->delFunction(this);
-  else
-    QLineEdit::keyPressEvent(event);
+  } else if (event->key() <= Qt::Key_A && event->key() <= Qt::Key_Z) {
+    // Is a letter
+    text_.append(event->text());
+    textChanged(text_);
+    QWidget::keyPressEvent(event);
+  } else if (event->key() == Qt::Key_Return) {
+    returnPressed();
+  }
+  
+}
+
+QString EquationWidget::text() const {
+  return text_;
 }
