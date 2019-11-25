@@ -25,10 +25,12 @@ set(SOURCES
     src/grapher.cpp
     src/function.cpp
     src/equation_widget.cpp
+    src/equation_input.cpp
     include/window.h
     include/grapher.h
     include/function.h
     include/equation_widget.h
+    include/equation_input.h
 )
 
 add_executable(GraphingCalculator ${SOURCES} ${MOC_HEADERS})
