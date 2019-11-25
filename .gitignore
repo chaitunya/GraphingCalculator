@@ -8,5 +8,6 @@ CMakeFiles/**
 compile_commands.json
 .clangd
 .clang-format
+.nvimrc
 .idea
 GraphingCalculator.cbp
