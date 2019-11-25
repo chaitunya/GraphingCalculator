@@ -27,20 +27,6 @@ void Grapher::paintEvent(QPaintEvent *) {
   painter.setBrush(brush);
   painter.setRenderHint(QPainter::Antialiasing, true);
 
-  // graph axes
-  
-  QPen ax_pen; ax_pen.setWidth(2);
-  if (xMin < 0 && 0 < xMax) {
-    painter.setPen(ax_pen);
-    int p = -xMin / (xMax - xMin) * width();
-    painter.drawLine(p, 0, p, height());
-  }
-
-  if (yMin < 0 && 0 < yMax) {
-    painter.setPen(ax_pen);
-    int p = height() - (-yMin / (yMax - yMin) * height());
-    painter.drawLine(0, p, width(), p);
-  }
   
   // graph rules
   
@@ -167,6 +153,20 @@ void Grapher::paintEvent(QPaintEvent *) {
         graphFunction(&painter, f, &Function::integral0);
       }
     }
+  }
+
+  // graph axes
+  QPen ax_pen; ax_pen.setWidth(2);
+  if (xMin < 0 && 0 < xMax) {
+    painter.setPen(ax_pen);
+    int p = -xMin / (xMax - xMin) * width();
+    painter.drawLine(p, 0, p, height());
+  }
+
+  if (yMin < 0 && 0 < yMax) {
+    painter.setPen(ax_pen);
+    int p = height() - (-yMin / (yMax - yMin) * height());
+    painter.drawLine(0, p, width(), p);
   }
 
   // draw border
