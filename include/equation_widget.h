@@ -6,6 +6,7 @@
 #include "function.h"
 #include "equation_input.h"
 #include <QHBoxLayout>
+#include <QToolButton>
 
 class Window;
 
@@ -20,6 +21,8 @@ private slots:
   void updateFunction(const QString &text);
   void addFunction();
   void delFunction();
+  void setDisplayDerivative(bool show);
+  void setDisplayIntegral(bool show);
 
 private:
   Function *func;
@@ -27,6 +30,8 @@ private:
   Window *window;
   EquationInput *equation_input;
   QHBoxLayout *layout;
+  QToolButton *derivative_button;
+  QToolButton *integral_button;
   
 
 };

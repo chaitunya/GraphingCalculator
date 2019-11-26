@@ -210,16 +210,12 @@ std::vector<QPointF> Function::calculateRelExtrema(mathmethod_t func, double xMi
 
 std::vector<QPointF> Function::calculateRelExtrema(double xMin, double xMax, double deltaX) {
   std::vector<QPointF> extrema;
-  double f_xLeft; 
-  double f_xRight;
-  double xLeft; 
-  double xRight;
   QPointF extremum;
   for (double x = xMin; x < xMax; x += deltaX) {
-    xLeft = x;
-    xRight = x + deltaX;
-    f_xLeft = derivative(xLeft);
-    f_xRight = derivative(xRight);
+    double xLeft = x;
+    double xRight = x + deltaX;
+    double f_xLeft = derivative(xLeft);
+    double f_xRight = derivative(xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0)) {
       continue;
@@ -235,16 +231,12 @@ std::vector<QPointF> Function::calculateRelExtrema(double xMin, double xMax, dou
 
 std::vector<QPointF> Function::calculateRelMaxs(double xMin, double xMax, double deltaX) {
   std::vector<QPointF> maxs;
-  double f_xLeft; 
-  double f_xRight;
-  double xLeft; 
-  double xRight;
   QPointF max;
   for (double x = xMin; x < xMax; x += deltaX) {
-    xLeft = x;
-    xRight = x + deltaX;
-    f_xLeft = derivative(xLeft);
-    f_xRight = derivative(xRight);
+    double xLeft = x;
+    double xRight = x + deltaX;
+    double f_xLeft = derivative(xLeft);
+    double f_xRight = derivative(xRight);
     if ((f_xLeft < 0 && f_xRight > 0) ||
         (f_xLeft > 0 && f_xRight > 0)
         || (f_xLeft < 0 && f_xRight < 0)) {
@@ -261,16 +253,12 @@ std::vector<QPointF> Function::calculateRelMaxs(double xMin, double xMax, double
 
 std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double deltaX) {
   std::vector<QPointF> mins;
-  double f_xLeft; 
-  double f_xRight;
-  double xLeft; 
-  double xRight;
   QPointF min;
   for (double x = xMin; x < xMax; x += deltaX) {
-    xLeft = x;
-    xRight = x + deltaX;
-    f_xLeft = derivative(xLeft);
-    f_xRight = derivative(xRight);
+    double xLeft = x;
+    double xRight = x + deltaX;
+    double f_xLeft = derivative(xLeft);
+    double f_xRight = derivative(xRight);
     if ((f_xLeft > 0 && f_xRight < 0) ||
         (f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0)) {
