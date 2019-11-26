@@ -24,8 +24,6 @@ public:
   void removeFunction(int index);
   QPoint cvtCoords(double x, double y);
 
-public slots:
-
 protected:
   void paintEvent(QPaintEvent *event) override;
   void wheelEvent(QWheelEvent *event) override;
@@ -42,7 +40,7 @@ private:
   double xMax = 11;
   double yMin = -11;
   double yMax = 11;
-  double deltaX = 1;
+  double deltaX;
 
   double xOffset;
   double yOffset;

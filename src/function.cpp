@@ -28,6 +28,7 @@ Function::Function(const char *expr, const QColor &color)
 }
 
 void Function::setText(const char *expr) {
+  is_changed = true;
   // Remove and replace evaluator
   if (evaluator)
     evaluator_destroy(evaluator);
@@ -75,7 +76,26 @@ double Function::integral(double a, double b) {
 }
 
 double Function::integral0(double x) {
-  return integral(0, x);
+  static double old_x = x;
+  static double old_integral = 0;
+  if (x - deltaX == old_x && !is_changed) {
+    old_integral += evaluateFunction(x) * deltaX;
+  } else if (old_x - deltaX == x && !is_changed) {
+    old_integral -= evaluateFunction(x) * deltaX;
+  } else if (x > 0) {
+    old_integral = 0;
+    for (double i = 0; i < x; i += deltaX) {
+      old_integral += evaluateFunction(i) * deltaX;
+    }
+  } else if (x < 0) {
+    old_integral = 0;
+    for (double i = 0; i > x; i -= deltaX) {
+      old_integral -= evaluateFunction(i) * deltaX;
+    }
+  }
+  is_changed = false;
+  old_x = x;
+  return old_integral;
 }
 
 double Function::evaluateFunction(double x) {
@@ -348,4 +368,8 @@ void Function::setColor(const QColor &new_color) {
 
 QColor Function::getColor() const {
   return color;
+}
+
+void Function::set_delta_x(double delta_x) {
+  deltaX = delta_x;
 }

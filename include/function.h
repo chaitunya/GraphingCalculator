@@ -40,6 +40,8 @@ public:
   bool b_graphDerivative = false;
   bool b_graphIntegral = false;
 
+  void set_delta_x(double delta_x);
+
   // Calculate features of graph
   std::vector<QPointF> calculateSingleZeros(mathmethod_t func, double xMin, double xMax, double deltaX);
   std::vector<QPointF> calculateZeros(mathmethod_t func, double xMin, double xMax, double deltaX);
@@ -61,7 +63,7 @@ private:
   double brent(mathmethod_t func, double xMin, double xMax, double min_diff);
 
   QColor color;
-  mathfunc_t mathFunc;
+  mathfunc_t mathFunc = nullptr;
 
   // parser utilities
   void *evaluator = 0;
@@ -69,6 +71,8 @@ private:
   double deltaX = 0.0001;
   bool is_parsed;
   bool is_valid;
+
+  bool is_changed = false;
 
 };
 

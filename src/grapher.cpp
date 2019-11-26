@@ -242,7 +242,9 @@ void Grapher::graphFunction(QPainter* painter, Function* F, mathmethod_t func) {
   bool out_of_bounds_top = false, out_of_bounds_bot = false;
   for (int px_x = 0; px_x < width(); px_x++) {
     double coord_x = px_x * (xMax - xMin) / width() + xMin;
-    double coord_y = (F->*func)(coord_x);
+    double coord_y;
+    F->set_delta_x(coord_x - ((px_x - 1) * (xMax - xMin) / width() + xMin));
+    coord_y = (F->*func)(coord_x);
     double px_y = height() - ((coord_y - yMin) / (yMax - yMin) * height());
     if (F->discontinuityBetween(func, coord_x - (xMax - xMin) / width(),
                                 coord_x, (xMax - xMin) / width())) {
