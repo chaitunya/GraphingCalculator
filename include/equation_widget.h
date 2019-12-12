@@ -21,7 +21,7 @@ private slots:
   void updateFunction(const QString &text);
   void addFunction();
   void delFunction();
-  void setDisplayDerivative(bool show);
+  void setDisplayDerivative();
   void setDisplayIntegral(bool show);
 
 private:

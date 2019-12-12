@@ -21,10 +21,10 @@ public:
   Function(const char *expr, const QColor &color);
   void setText(const char *expr);
 
-
   // evaluateFunction and operations on Function
   double evaluateFunction(double x);
   double derivative(double x);
+  double second_derivative(double x);
   double derivative(mathmethod_t func, double x);
   double integral(double a, double b);
   double integral0(double x);
@@ -34,10 +34,11 @@ public:
   void setColor(const QColor &new_color);
   QColor getColor() const;
   bool getValid() const;
+  int get_n_derivative() const;
+  void set_n_derivative(int n);
 
   // hidden bools
   bool isHidden = false;
-  bool b_graphDerivative = false;
   bool b_graphIntegral = false;
 
   void set_delta_x(double delta_x);
@@ -49,6 +50,7 @@ public:
   std::vector<QPointF> calculateRelMaxs(double xMin, double xMax, double deltaX);
   std::vector<QPointF> calculateRelExtrema(double xMin, double xMax, double deltaX);
   std::vector<QPointF> calculateRelExtrema(mathmethod_t func, double xMin, double xMax, double deltaX);
+  std::vector<QPointF> calculateInflectionPoints(double xMin, double xMax, double deltaX);
   std::vector<double> calculateVertAsymptotes(double xMin, double xMax, double deltaX);
   bool discontinuityBetween(mathmethod_t func, double xMin, double xMax, double deltaX);
   double limitAt(mathmethod_t func, double x, double deltaX, double max_diff);
@@ -73,6 +75,8 @@ private:
   bool is_valid;
 
   bool is_changed = false;
+
+  int n_derivative;
 
 };
 

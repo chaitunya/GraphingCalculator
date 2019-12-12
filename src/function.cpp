@@ -63,6 +63,10 @@ double Function::derivative(mathmethod_t func, double x) {
   return ((this->*func)(x + deltaX) - (this->*func)(x)) / deltaX;
 }
 
+double Function::second_derivative(double x) {
+  return (derivative(x + deltaX) - derivative(x)) / deltaX;
+}
+
 double Function::integral(double a, double b) {
   double integral = 0;
   if (a < b) {
@@ -180,7 +184,8 @@ std::vector<QPointF> Function::calculateSingleZeros(mathmethod_t func, double xM
     f_xLeft = (this->*func)(xLeft);
     f_xRight = (this->*func)(xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
-        (f_xLeft < 0 && f_xRight < 0)) {
+        (f_xLeft < 0 && f_xRight < 0) ||
+        (f_xLeft == 0 && f_xRight == 0)) {
       continue;
     } else {
       zero = QPointF(0, 0);
@@ -216,7 +221,8 @@ std::vector<QPointF> Function::calculateRelExtrema(mathmethod_t func, double xMi
     f_xLeft = derivative(func, xLeft);
     f_xRight = derivative(func, xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
-        (f_xLeft < 0 && f_xRight < 0)) {
+        (f_xLeft < 0 && f_xRight < 0) ||
+        (f_xLeft == 0 && f_xRight == 0)) {
       continue;
     } else {
       extremum = QPoint();
@@ -258,8 +264,9 @@ std::vector<QPointF> Function::calculateRelMaxs(double xMin, double xMax, double
     double f_xLeft = derivative(xLeft);
     double f_xRight = derivative(xRight);
     if ((f_xLeft < 0 && f_xRight > 0) ||
-        (f_xLeft > 0 && f_xRight > 0)
-        || (f_xLeft < 0 && f_xRight < 0)) {
+        (f_xLeft > 0 && f_xRight > 0) ||
+        (f_xLeft < 0 && f_xRight < 0) ||
+        (f_xLeft == 0 && f_xRight == 0)) {
       continue;
     } else {
       max = QPoint();
@@ -281,7 +288,8 @@ std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double
     double f_xRight = derivative(xRight);
     if ((f_xLeft > 0 && f_xRight < 0) ||
         (f_xLeft > 0 && f_xRight > 0) ||
-        (f_xLeft < 0 && f_xRight < 0)) {
+        (f_xLeft < 0 && f_xRight < 0) ||
+        (f_xLeft == 0 && f_xRight == 0)) {
       continue;
     } else {
       min = QPoint();
@@ -291,6 +299,26 @@ std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double
     }
   }
   return mins;
+}
+
+std::vector<QPointF> Function::calculateInflectionPoints(double xMin, double xMax, double deltaX) {
+  std::vector<QPointF> ips;
+  for (double x = xMin; x < xMax; x += deltaX) {
+    double xLeft = x;
+    double xRight = x + deltaX;
+    double f_xLeft = second_derivative(xLeft);
+    double f_xRight = second_derivative(xRight);
+    if ((f_xLeft > 0 && f_xRight > 0) ||
+        (f_xLeft < 0 && f_xRight < 0)) {
+      continue;
+    } else {
+      QPointF ip;
+      ip.setX(brent(&Function::second_derivative, xLeft, xRight, MIN_DIFF));
+      ip.setY(evaluateFunction(ip.x()));
+      ips.push_back(ip);
+    }
+  }
+  return ips;
 }
 
 std::vector<double> Function::calculateVertAsymptotes(double xMin, double xMax, double deltaX) {
@@ -317,15 +345,15 @@ std::vector<double> Function::calculateVertAsymptotes(double xMin, double xMax, 
 }
 
 bool Function::discontinuityBetween(mathmethod_t func, double xMin, double xMax, double deltaX) {
-   auto zeros = calculateSingleZeros(func, xMin, xMax, deltaX);
-   double zero;
-   double lim;
-   for (QPointF pt : zeros) {
-     zero = pt.x();
-     lim = limitAt(func, zero, 0.01, 0.5);
-     if (std::isnan(lim))
-       return true;
-   }
+  auto zeros = calculateSingleZeros(func, xMin, xMax, deltaX);
+  const double lim_delta_x = 0.00001;
+  const double max_diff = 1;
+  for (QPointF pt : zeros) {
+    double zero = pt.x();
+    double lim = limitAt(func, zero, lim_delta_x, max_diff);
+    if (abs(lim - pt.y()) < max_diff) return true;
+    if (std::isnan(lim) || std::isnan(pt.y())) return true;
+  }
   return false;
 }
 
@@ -372,4 +400,15 @@ QColor Function::getColor() const {
 
 void Function::set_delta_x(double delta_x) {
   deltaX = delta_x;
+}
+
+void Function::set_n_derivative(int n) {
+  if (0 <= n && n <= 2)
+    n_derivative = n;
+  else
+    n_derivative = 0;
+}
+
+int Function::get_n_derivative() const {
+  return n_derivative;
 }

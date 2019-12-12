@@ -22,7 +22,8 @@ public:
   QSize sizeHint() const override;
   void addFunction(Function *f, int index = -1);
   void removeFunction(int index);
-  QPoint cvtCoords(double x, double y);
+  QPoint cvtCoordsToPx(QPointF pt) const;
+  QPointF cvtPxToCoords(QPoint pt) const;
 
 protected:
   void paintEvent(QPaintEvent *event) override;
@@ -56,6 +57,12 @@ private:
 
   friend class Function;
 
+};
+
+struct Point {
+  QPoint point;
+  QColor color;
+  int width;
 };
 
 #endif // GRAPHER_H

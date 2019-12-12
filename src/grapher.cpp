@@ -138,16 +138,44 @@ void Grapher::paintEvent(QPaintEvent *) {
   QPen linePen;
   linePen.setWidth(3);
 
-  QPen pointPen;
-  pointPen.setWidth(10);
+  QColor rel_min_color(255, 0, 0);
+  QColor rel_max_color(0, 0, 255);
+  QColor zero_color(0, 100, 100);
+  QColor ip_color(200, 200, 100);
+  int rel_min_width = 3;
+  int rel_max_width = 3;
+  int zero_width = 3;
+  int ip_width = 3;
+
+  std::vector<Point> points;
 
   for (EquationWidget *eqWidg: *equationWidgets) {
     Function *f = eqWidg->getFunction();
     if (!f->isHidden && f->getValid()) {
+      std::vector<QPointF> rel_mins = f->calculateRelMins(xMin, xMax, (xMax - xMin) / width());
+      std::vector<QPointF> rel_maxs = f->calculateRelMaxs(xMin, xMax, (xMax - xMin) / width());
+      std::vector<QPointF> ips = f->calculateInflectionPoints(xMin, xMax, (xMax - xMin) / width());
+      std::vector<QPointF> zeros = f->calculateSingleZeros(&Function::evaluateFunction, xMin, xMax, (xMax - xMin) / width());
+      std::transform(rel_mins.begin(), rel_mins.end(), std::back_inserter(points),
+        [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_min_color, rel_min_width}; }
+      );
+      std::transform(rel_maxs.begin(), rel_maxs.end(), std::back_inserter(points),
+        [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_max_color, rel_max_width}; }
+      );
+      std::transform(ips.begin(), ips.end(), std::back_inserter(points),
+        [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), ip_color, ip_width}; }
+      );
+      std::transform(zeros.begin(), zeros.end(), std::back_inserter(points),
+        [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), zero_color, zero_width}; }
+      );
+
       painter.setPen(linePen);
       graphFunction(&painter, f, &Function::evaluateFunction);
-      if (f->b_graphDerivative) {
-        graphFunction(&painter, f, &Function::derivative);
+      if (f->get_n_derivative() != 0) {
+        if (f->get_n_derivative() == 1)
+          graphFunction(&painter, f, &Function::derivative);
+        else if (f->get_n_derivative() == 2)
+          graphFunction(&painter, f, &Function::second_derivative);
       }
       if (f->b_graphIntegral) {
         graphFunction(&painter, f, &Function::integral0);
@@ -168,6 +196,18 @@ void Grapher::paintEvent(QPaintEvent *) {
     int p = height() - (-yMin / (yMax - yMin) * height());
     painter.drawLine(0, p, width(), p);
   }
+
+  // Plot points (relative extrema, points of inflection)
+  QPen pointPen;
+  for (Point pt : points) {
+    pointPen.setColor(pt.color);
+    pointPen.setWidth(pt.width);
+    painter.setPen(pointPen);
+    painter.setBrush(QBrush(pt.color));
+    painter.drawEllipse(pt.point, pt.width, pt.width);
+  }
+  painter.setBrush(brush);
+  
 
   // draw border
   QPen borderPen;
@@ -276,3 +316,12 @@ void Grapher::graphFunction(QPainter* painter, Function* F, mathmethod_t func) {
   painter->drawPath(path);
 }
 
+QPoint Grapher::cvtCoordsToPx(QPointF pt) const {
+  return QPoint((pt.x() - xMin) * width() / (xMax - xMin),
+    height() - (pt.y() - yMin) * height() / (yMax - yMin));
+}
+
+QPointF Grapher::cvtPxToCoords(QPoint pt) const {
+  return QPointF(pt.x() * (xMax - xMin) / width() + xMin,
+    height() - (pt.y() * (yMax - yMin) / height() + yMin));
+}

@@ -11,7 +11,6 @@ EquationWidget::EquationWidget(Function *f, Window *window, Grapher *grapher, QW
   
   equation_input = new EquationInput(this);
   derivative_button = new QToolButton(this);
-  derivative_button->setCheckable(true);
   derivative_button->setText("D");
   integral_button = new QToolButton(this);
   integral_button->setCheckable(true);
@@ -24,7 +23,7 @@ EquationWidget::EquationWidget(Function *f, Window *window, Grapher *grapher, QW
   connect(equation_input, SIGNAL(textChanged(const QString&)), this, SLOT(updateFunction(const QString&)));
   connect(equation_input, SIGNAL(returnPressed()), this, SLOT(addFunction()));
   connect(equation_input, SIGNAL(deleteKeyReceived()), this, SLOT(delFunction()));
-  connect(derivative_button, SIGNAL(toggled(bool)), this, SLOT(setDisplayDerivative(bool)));
+  connect(derivative_button, SIGNAL(released()), this, SLOT(setDisplayDerivative()));
   connect(integral_button, SIGNAL(toggled(bool)), this, SLOT(setDisplayIntegral(bool)));
 }
 
@@ -43,8 +42,12 @@ void EquationWidget::delFunction() {
   window->delFunction(this);
 }
 
-void EquationWidget::setDisplayDerivative(bool show) {
-  func->b_graphDerivative = show;
+void EquationWidget::setDisplayDerivative() {
+  func->set_n_derivative((func->get_n_derivative() + 1) % 3);
+  if (func->get_n_derivative() != 0)
+    derivative_button->setText(tr("D") + QString::number(func->get_n_derivative()));
+  else
+    derivative_button->setText("D");
   grapher->update();
 }
 
