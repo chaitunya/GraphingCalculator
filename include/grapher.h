@@ -35,7 +35,7 @@ protected:
 
 private:
   std::vector<EquationWidget*> *equationWidgets;
-  void graphFunction(QPainter *painter, Function *F, mathmethod_t func);
+  std::vector<QPointF> graphFunction(QPainter *painter, Function *F, mathmethod_t func);
   QBrush brush;
   double xMin = -11;
   double xMax = 11;

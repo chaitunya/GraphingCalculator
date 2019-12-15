@@ -309,7 +309,8 @@ std::vector<QPointF> Function::calculateInflectionPoints(double xMin, double xMa
     double f_xLeft = second_derivative(xLeft);
     double f_xRight = second_derivative(xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
-        (f_xLeft < 0 && f_xRight < 0)) {
+        (f_xLeft < 0 && f_xRight < 0) ||
+        (f_xLeft == 0 && f_xRight == 0)) {
       continue;
     } else {
       QPointF ip;
