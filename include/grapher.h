@@ -13,6 +13,15 @@
 
 struct EquationPair;
 
+struct DataSet {
+  std::vector<QPointF> zeros;
+  std::vector<QPointF> relative_minimums;
+  std::vector<QPointF> relative_maximums;
+  std::vector<QPointF> inflection_points;
+  std::vector<QPointF> removable_discontinuities;
+  std::vector<double> vertical_asymptotes;
+};
+
 class Grapher : public QWidget
 {
   Q_OBJECT
@@ -22,8 +31,6 @@ public:
   QSize sizeHint() const override;
   void addFunction(Function *f, int index = -1);
   void removeFunction(int index);
-  QPoint cvtCoordsToPx(QPointF pt) const;
-  QPointF cvtPxToCoords(QPoint pt) const;
 
 protected:
   void paintEvent(QPaintEvent *event) override;
@@ -34,8 +41,14 @@ protected:
   void resizeEvent(QResizeEvent *event) override;
 
 private:
+  QPoint cvtCoordsToPx(QPointF pt) const;
+  QPointF cvtPxToCoords(QPoint pt) const;
+  double cvtPxToX(int x) const;
+  int cvtXToPx(double x) const;
+  double cvtPxToY(int y) const;
+  int cvtYToPx(double y) const;
   std::vector<EquationWidget*> *equationWidgets;
-  std::vector<QPointF> graphFunction(QPainter *painter, Function *F, mathmethod_t func);
+  DataSet graphFunction(QPainter *painter, Function *F, mathmethod_t func);
   QBrush brush;
   double xMin = -11;
   double xMax = 11;

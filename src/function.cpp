@@ -5,7 +5,7 @@
 #include <cmath>
 #include <cstring>
 
-#define MIN_DIFF 0.0001
+#define MIN_DIFF 0.00001
 
 
 Function::Function(mathfunc_t mathFunc)
@@ -328,18 +328,22 @@ std::vector<double> Function::calculateVertAsymptotes(double xMin, double xMax, 
   double f_xRight;
   double xLeft;
   double xRight;
-  double asy;
   for (double x = xMin; x < xMax; x += deltaX) {
     xLeft = x;
     xRight = x + deltaX;
-    f_xLeft = evaluateFunction(xLeft);
-    f_xRight = evaluateFunction(xRight);
-    if ((f_xLeft > 0 && f_xRight > 0) ||
-        (f_xLeft < 0 && f_xRight < 0)) {
+    f_xLeft = reciprocal(xLeft);
+    f_xRight = reciprocal(xRight);
+    if (((f_xLeft > 0 && f_xRight > 0) ||
+        (f_xLeft < 0 && f_xRight < 0) ||
+        (f_xLeft == 0 && f_xRight == 0))) {
       continue;
     } else {
-      asy = brent(&Function::evaluateFunction, xLeft, xRight, MIN_DIFF);
-      asys.push_back(asy);
+      double asy = brent(&Function::reciprocal, xLeft, xRight, MIN_DIFF);
+      double asy_rounded = round(asy * 100) / 100;
+      if (std::isinf(evaluateFunction(asy_rounded)) || std::isinf(evaluateFunction(asy)))
+        asys.push_back(asy);
+      // else
+      //   std::cout << "Is not inf" << std::endl;
     }
   }
   return asys;
