@@ -190,7 +190,8 @@ std::vector<QPointF> Function::calculateSingleZeros(mathmethod_t func, double xM
     } else {
       zero = QPointF(0, 0);
       zero.setX(brent(func, xLeft, xRight, MIN_DIFF));
-      zeros.push_back(zero);
+      if (abs(limitAt(&Function::evaluateFunction, zero.x(), 0.00001, 0.1)) <= 0.1)
+        zeros.push_back(zero);
     }
   }
 
@@ -303,6 +304,7 @@ std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double
 
 std::vector<QPointF> Function::calculateInflectionPoints(double xMin, double xMax, double deltaX) {
   std::vector<QPointF> ips;
+  const double max_diff = 0.00001;
   for (double x = xMin; x < xMax; x += deltaX) {
     double xLeft = x;
     double xRight = x + deltaX;
@@ -310,10 +312,11 @@ std::vector<QPointF> Function::calculateInflectionPoints(double xMin, double xMa
     double f_xRight = second_derivative(xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0) ||
-        (f_xLeft == 0 && f_xRight == 0)) {
+        (abs(f_xLeft) < max_diff && abs(f_xRight) < max_diff)) {
       continue;
     } else {
       QPointF ip;
+      std::cout << f_xLeft << ", " << f_xRight << std::endl;
       ip.setX(brent(&Function::second_derivative, xLeft, xRight, MIN_DIFF));
       ip.setY(evaluateFunction(ip.x()));
       ips.push_back(ip);
