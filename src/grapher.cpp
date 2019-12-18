@@ -344,22 +344,15 @@ DataSet Grapher::graphFunction(QPainter* painter, Function* F, mathmethod_t func
   bool out_of_bounds_top = false, out_of_bounds_bot = false;
   for (int px_x = 0; px_x < width(); px_x++) {
     double coord_x = cvtPxToX(px_x);
-    // std::cout << coord_x << std::endl;
     double coord_x_round = round(coord_x * 10) / 10.;
-    // std::cout << coord_x_round << std::endl;
     double coord_y_round = (F->*func)(coord_x_round);
     double lim = F->limitAt(func, coord_x, 0.00001, 1);
     double coord_y = (F->*func)(coord_x);
     int px_y = cvtYToPx(coord_y);
     bool discontinuity = false;
     if (std::isnan(coord_y_round) && !std::isnan(lim)) {
-      std::cout << 1 << std::endl;
       discontinuity = true;
       dataset.removable_discontinuities.push_back({coord_x_round, lim});
-    // } else if (std::isinf(coord_y_round) && std::isnan(lim)) {
-    //   std::cout << 2 << std::endl;
-    //   discontinuity = true;
-    //   dataset.vertical_asymptotes.push_back(coord_x_round);
     } 
     F->set_delta_x(coord_x - ((px_x - 1) * (xMax - xMin) / width() + xMin));
     if (discontinuity) {
