@@ -133,7 +133,7 @@ void Grapher::paintEvent(QPaintEvent *) {
   }
 
   
-  // graph functions
+  // graph functions and find points
 
   QPen linePen;
   linePen.setWidth(3);
@@ -152,6 +152,7 @@ void Grapher::paintEvent(QPaintEvent *) {
 
   std::vector<Point> points;
   std::vector<int> vertical_asymptotes;
+  DataSet dataset;
 
   for (EquationWidget *eqWidg: *equationWidgets) {
     Function *f = eqWidg->getFunction();
@@ -162,49 +163,65 @@ void Grapher::paintEvent(QPaintEvent *) {
           derivative_dataset = graphFunction(&painter, f, &Function::derivative);
         else if (f->get_n_derivative() == 2)
           derivative_dataset = graphFunction(&painter, f, &Function::second_derivative);
-        std::transform(derivative_dataset.zeros.begin(), derivative_dataset.zeros.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), zero_color, zero_width}; }
-        );
-        std::transform(derivative_dataset.relative_minimums.begin(), derivative_dataset.relative_minimums.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_min_color, rel_min_width}; }
-        );
-        std::transform(derivative_dataset.relative_maximums.begin(), derivative_dataset.relative_maximums.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_max_color, rel_max_width}; }
-        );
-        std::transform(derivative_dataset.inflection_points.begin(), derivative_dataset.inflection_points.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), ip_color, ip_width}; }
-        );
-        std::transform(derivative_dataset.removable_discontinuities.begin(), derivative_dataset.removable_discontinuities.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rd_color, rd_width}; }
-        );
-        std::transform(derivative_dataset.vertical_asymptotes.begin(), derivative_dataset.vertical_asymptotes.end(), std::back_inserter(vertical_asymptotes),
-          [=](double x) -> int { return cvtXToPx(x); }
-        );
+        // std::transform(derivative_dataset.zeros.begin(), derivative_dataset.zeros.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), zero_color, zero_width}; }
+        // );
+        // std::transform(derivative_dataset.relative_minimums.begin(), derivative_dataset.relative_minimums.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_min_color, rel_min_width}; }
+        // );
+        // std::transform(derivative_dataset.relative_maximums.begin(), derivative_dataset.relative_maximums.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_max_color, rel_max_width}; }
+        // );
+        // std::transform(derivative_dataset.inflection_points.begin(), derivative_dataset.inflection_points.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), ip_color, ip_width}; }
+        // );
+        // std::transform(derivative_dataset.removable_discontinuities.begin(), derivative_dataset.removable_discontinuities.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rd_color, rd_width}; }
+        // );
+        // std::transform(derivative_dataset.vertical_asymptotes.begin(), derivative_dataset.vertical_asymptotes.end(), std::back_inserter(vertical_asymptotes),
+        //   [=](double x) -> int { return cvtXToPx(x); }
+        // );
+        double a = 3.15;
+        double b = 8.432;
+        std::cout << "Starting value: " << a << std::endl;
+        std::cout << "Ending value: " << b << std::endl;
+        double dX = 0.000001;
+        f->set_delta_x(0.000001);
+        double integral = 0;
+        if (a < b) {
+          for (double i = a; i < b; i += dX)
+            integral += f->derivative(i) * dX;
+        } else if (a > b) {
+          for (double i = a; i > b; i -= dX)
+            integral -= f->derivative(i) * dX;
+        }
+        std::cout << "Integral of derivative: " << integral << std::endl;
       }
 
       if (f->b_graphIntegral) {
         DataSet integral_dataset = graphFunction(&painter, f, &Function::integral0);
-        std::transform(integral_dataset.zeros.begin(), integral_dataset.zeros.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), zero_color, zero_width}; }
-        );
-        std::transform(integral_dataset.relative_minimums.begin(), integral_dataset.relative_minimums.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_min_color, rel_min_width}; }
-        );
-        std::transform(integral_dataset.relative_maximums.begin(), integral_dataset.relative_maximums.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_max_color, rel_max_width}; }
-        );
-        std::transform(integral_dataset.inflection_points.begin(), integral_dataset.inflection_points.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), ip_color, ip_width}; }
-        );
-        std::transform(integral_dataset.removable_discontinuities.begin(), integral_dataset.removable_discontinuities.end(), std::back_inserter(points),
-          [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rd_color, rd_width}; }
-        );
-        std::transform(integral_dataset.vertical_asymptotes.begin(), integral_dataset.vertical_asymptotes.end(), std::back_inserter(vertical_asymptotes),
-          [=](double x) -> int { return cvtXToPx(x); }
-        );
+        // std::transform(integral_dataset.zeros.begin(), integral_dataset.zeros.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), zero_color, zero_width}; }
+        // );
+        // std::transform(integral_dataset.relative_minimums.begin(), integral_dataset.relative_minimums.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_min_color, rel_min_width}; }
+        // );
+        // std::transform(integral_dataset.relative_maximums.begin(), integral_dataset.relative_maximums.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rel_max_color, rel_max_width}; }
+        // );
+        // std::transform(integral_dataset.inflection_points.begin(), integral_dataset.inflection_points.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), ip_color, ip_width}; }
+        // );
+        // std::transform(integral_dataset.removable_discontinuities.begin(), integral_dataset.removable_discontinuities.end(), std::back_inserter(points),
+        //   [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), rd_color, rd_width}; }
+        // );
+        // std::transform(integral_dataset.vertical_asymptotes.begin(), integral_dataset.vertical_asymptotes.end(), std::back_inserter(vertical_asymptotes),
+        //   [=](double x) -> int { return cvtXToPx(x); }
+        // );
       }
 
-      DataSet dataset = graphFunction(&painter, f, &Function::evaluateFunction);
+
+      dataset = graphFunction(&painter, f, &Function::evaluateFunction);
       // Add dataset points vector
       std::transform(dataset.zeros.begin(), dataset.zeros.end(), std::back_inserter(points),
         [=](QPointF pt) -> Point { return Point{cvtCoordsToPx(pt), zero_color, zero_width}; }
@@ -351,10 +368,17 @@ DataSet Grapher::graphFunction(QPainter* painter, Function* F, mathmethod_t func
     int px_y = cvtYToPx(coord_y);
     bool discontinuity = false;
     if (std::isnan(coord_y_round) && !std::isnan(lim)) {
+      // if limit exists but value is undefined, then it there is a discontinuity
       discontinuity = true;
+      // if (dataset.removable_discontinuities.size() == 0 || (dataset.removable_discontinuities.size() > 0 && abs(dataset.removable_discontinuities[dataset.removable_discontinuities.size() - 1].x()  - lim)) > 0.5) {
+      // if (dataset.removable_discontinuities.size() == 0) {
       dataset.removable_discontinuities.push_back({coord_x_round, lim});
+      // }
     } 
+    if (std::isnan(coord_x) || std::isinf(coord_x))
+      discontinuity = true;
     F->set_delta_x(coord_x - ((px_x - 1) * (xMax - xMin) / width() + xMin));
+    // skip points of discontinuity
     if (discontinuity) {
       path.moveTo(px_x, px_y);
     } else if (px_x < 0) {
@@ -382,6 +406,38 @@ DataSet Grapher::graphFunction(QPainter* painter, Function* F, mathmethod_t func
     }
   }
   painter->drawPath(path);
+  // dataset.removable_discontinuities.erase(dataset.removable_discontinuities.begin(), dataset.removable_discontinuities.end() - 1);
+  std::cout << "Removabl discontinuities" << std::endl;
+  double x=0, y=0;
+  if (dataset.removable_discontinuities.size() > 0) {
+    for (int i = 0; i < dataset.removable_discontinuities.size(); i++) {
+      QPointF pt = dataset.removable_discontinuities[i];
+      x += pt.x();
+      y += pt.y();
+      // std::cout << pt.x() << ", " << pt.y() << std::endl;
+    }
+    std::cout << x / dataset.removable_discontinuities.size() << ", " << y / dataset.removable_discontinuities.size() << std::endl;
+  }
+  std::cout << "inflection points" << std::endl;
+  for (int i = 0; i < dataset.inflection_points.size(); i++) {
+    QPointF pt = dataset.inflection_points[i];
+    std::cout << pt.x() << ", " << pt.y() << std::endl;
+  }
+  std::cout << "relative maxmimums" << std::endl;
+  for (int i = 0; i < dataset.relative_maximums.size(); i++) {
+    QPointF pt = dataset.relative_maximums[i];
+    std::cout << pt.x() << ", " << pt.y() << std::endl;
+  }
+  std::cout << "relative minimums" << std::endl;
+  for (int i = 0; i < dataset.relative_minimums.size(); i++) {
+    QPointF pt = dataset.relative_minimums[i];
+    std::cout << pt.x() << ", " << pt.y() << std::endl;
+  }
+  std::cout << "Zeros" << std::endl;
+  for (int i = 0; i < dataset.zeros.size(); i++) {
+    QPointF pt = dataset.zeros[i];
+    std::cout << pt.x() << ", " << pt.y() << std::endl;
+  }
   return dataset;
 }
 

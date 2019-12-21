@@ -76,7 +76,7 @@ private:
 
   bool is_changed = false;
 
-  int n_derivative;
+  int n_derivative = 0;
 
 };
 

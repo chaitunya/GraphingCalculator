@@ -115,6 +115,7 @@ bool Function::getValid() const {
 }
 
 double Function::brent(mathmethod_t func, double xMin, double xMax, double min_diff) {
+  // Run brent's method algorithm on function to find zeros: https://en.wikipedia.org/wiki/Brent%27s_method
   double f_xMin = (this->*func)(xMin);
   double f_xMax = (this->*func)(xMax);
   if ((f_xMin > 0 && f_xMax > 0) || (f_xMin < 0 && f_xMax < 0))
@@ -173,21 +174,17 @@ double Function::brent(mathmethod_t func, double xMin, double xMax, double min_d
 std::vector<QPointF> Function::calculateSingleZeros(mathmethod_t func, double xMin, double xMax, double deltaX) {
   // uses Brent's method to calculate zeros: https://en.wikipedia.org/wiki/Brent%27s_method
   std::vector<QPointF> zeros;
-  double f_xLeft; 
-  double f_xRight;
-  double xLeft; 
-  double xRight;
-  QPointF zero;
   for (double x = xMin; x < xMax; x += deltaX) {
-    xLeft = x;
-    xRight = x + deltaX;
-    f_xLeft = (this->*func)(xLeft);
-    f_xRight = (this->*func)(xRight);
+    double xLeft = x;
+    double xRight = x + deltaX;
+    double f_xLeft = (this->*func)(xLeft);
+    double f_xRight = (this->*func)(xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0) ||
         (f_xLeft == 0 && f_xRight == 0)) {
       continue;
     } else {
+      QPointF zero;
       zero = QPointF(0, 0);
       zero.setX(brent(func, xLeft, xRight, MIN_DIFF));
       if (abs(limitAt(&Function::evaluateFunction, zero.x(), 0.00001, 0.1)) <= 0.1)
@@ -211,16 +208,12 @@ std::vector<QPointF> Function::calculateZeros(mathmethod_t func, double xMin, do
 
 std::vector<QPointF> Function::calculateRelExtrema(mathmethod_t func, double xMin, double xMax, double deltaX) {
   std::vector<QPointF> extrema;
-  double f_xLeft; 
-  double f_xRight;
-  double xLeft; 
-  double xRight;
   QPointF extremum;
   for (double x = xMin; x < xMax; x += deltaX) {
-    xLeft = x;
-    xRight = x + deltaX;
-    f_xLeft = derivative(func, xLeft);
-    f_xRight = derivative(func, xRight);
+    double xLeft = x;
+    double xRight = x + deltaX;
+    double f_xLeft = derivative(func, xLeft);
+    double f_xRight = derivative(func, xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0) ||
         (f_xLeft == 0 && f_xRight == 0)) {
@@ -236,6 +229,7 @@ std::vector<QPointF> Function::calculateRelExtrema(mathmethod_t func, double xMi
 }
 
 std::vector<QPointF> Function::calculateRelExtrema(double xMin, double xMax, double deltaX) {
+  // check if 
   std::vector<QPointF> extrema;
   QPointF extremum;
   for (double x = xMin; x < xMax; x += deltaX) {
@@ -244,7 +238,8 @@ std::vector<QPointF> Function::calculateRelExtrema(double xMin, double xMax, dou
     double f_xLeft = derivative(xLeft);
     double f_xRight = derivative(xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
-        (f_xLeft < 0 && f_xRight < 0)) {
+        (f_xLeft < 0 && f_xRight < 0) ||
+        (f_xLeft == 0 && f_xRight == 0)) {
       continue;
     } else {
       extremum = QPoint();
@@ -257,6 +252,7 @@ std::vector<QPointF> Function::calculateRelExtrema(double xMin, double xMax, dou
 }
 
 std::vector<QPointF> Function::calculateRelMaxs(double xMin, double xMax, double deltaX) {
+  // check if derivative changes from negative to positive
   std::vector<QPointF> maxs;
   QPointF max;
   for (double x = xMin; x < xMax; x += deltaX) {
@@ -267,7 +263,8 @@ std::vector<QPointF> Function::calculateRelMaxs(double xMin, double xMax, double
     if ((f_xLeft < 0 && f_xRight > 0) ||
         (f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0) ||
-        (f_xLeft == 0 && f_xRight == 0)) {
+        (f_xLeft == 0 && f_xRight == 0) ||
+        std::isnan(f_xLeft) || std::isnan(f_xLeft)) {
       continue;
     } else {
       max = QPoint();
@@ -280,8 +277,10 @@ std::vector<QPointF> Function::calculateRelMaxs(double xMin, double xMax, double
 }
 
 std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double deltaX) {
+  // check if derivative changes from negative to positive
   std::vector<QPointF> mins;
   QPointF min;
+  const double min_diff = 0.00001;
   for (double x = xMin; x < xMax; x += deltaX) {
     double xLeft = x;
     double xRight = x + deltaX;
@@ -290,11 +289,12 @@ std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double
     if ((f_xLeft > 0 && f_xRight < 0) ||
         (f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0) ||
-        (f_xLeft == 0 && f_xRight == 0)) {
+        (f_xLeft == 0 && f_xRight == 0) ||
+        std::isnan(f_xLeft) || std::isnan(f_xLeft)) {
       continue;
     } else {
       min = QPoint();
-      min.setX(brent(&Function::derivative, xLeft, xRight, MIN_DIFF));
+      min.setX(brent(&Function::derivative, xLeft, xRight, min_diff));
       min.setY(evaluateFunction(min.x()));
       mins.push_back(min);
     }
@@ -303,8 +303,9 @@ std::vector<QPointF> Function::calculateRelMins(double xMin, double xMax, double
 }
 
 std::vector<QPointF> Function::calculateInflectionPoints(double xMin, double xMax, double deltaX) {
+  // get infleciton points by getting rel extrema of second derivative
   std::vector<QPointF> ips;
-  const double max_diff = 0.00001;
+  const double max_diff = 0.000001;
   for (double x = xMin; x < xMax; x += deltaX) {
     double xLeft = x;
     double xRight = x + deltaX;
@@ -312,13 +313,15 @@ std::vector<QPointF> Function::calculateInflectionPoints(double xMin, double xMa
     double f_xRight = second_derivative(xRight);
     if ((f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0) ||
-        (abs(f_xLeft) < max_diff && abs(f_xRight) < max_diff)) {
+        (abs(f_xLeft) < max_diff && abs(f_xRight) < max_diff) ||
+        std::isnan(f_xLeft) || std::isnan(f_xRight) ||
+        std::isinf(f_xLeft) || std::isinf(f_xRight)) {
       continue;
     } else {
       QPointF ip;
-      std::cout << f_xLeft << ", " << f_xRight << std::endl;
       ip.setX(brent(&Function::second_derivative, xLeft, xRight, MIN_DIFF));
       ip.setY(evaluateFunction(ip.x()));
+      std::cout << f_xLeft << ", " << f_xRight << std::endl;
       ips.push_back(ip);
     }
   }
@@ -326,16 +329,13 @@ std::vector<QPointF> Function::calculateInflectionPoints(double xMin, double xMa
 }
 
 std::vector<double> Function::calculateVertAsymptotes(double xMin, double xMax, double deltaX) {
+  // Gets asymptotes by finding zeros of reciprocal
   std::vector<double> asys;
-  double f_xLeft;
-  double f_xRight;
-  double xLeft;
-  double xRight;
   for (double x = xMin; x < xMax; x += deltaX) {
-    xLeft = x;
-    xRight = x + deltaX;
-    f_xLeft = reciprocal(xLeft);
-    f_xRight = reciprocal(xRight);
+    double xLeft = x;
+    double xRight = x + deltaX;
+    double f_xLeft = reciprocal(xLeft);
+    double f_xRight = reciprocal(xRight);
     if (((f_xLeft > 0 && f_xRight > 0) ||
         (f_xLeft < 0 && f_xRight < 0) ||
         (f_xLeft == 0 && f_xRight == 0))) {
@@ -345,8 +345,6 @@ std::vector<double> Function::calculateVertAsymptotes(double xMin, double xMax, 
       double asy_rounded = round(asy * 100) / 100;
       if (std::isinf(evaluateFunction(asy_rounded)) || std::isinf(evaluateFunction(asy)))
         asys.push_back(asy);
-      // else
-      //   std::cout << "Is not inf" << std::endl;
     }
   }
   return asys;
