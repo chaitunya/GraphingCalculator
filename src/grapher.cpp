@@ -9,7 +9,9 @@
 
 Grapher::Grapher(std::vector<EquationWidget*> *eqWidgets, QWidget *parent)
   : QWidget(parent), equationWidgets(eqWidgets) {
-  setBackgroundRole(QPalette::Base);
+  QPalette pal = palette();
+  pal.setColor(QPalette::Background, Qt::white);
+  setPalette(pal);
   setAutoFillBackground(true);
 }
 
