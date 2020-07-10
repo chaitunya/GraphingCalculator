@@ -321,7 +321,6 @@ std::vector<QPointF> Function::calculateInflectionPoints(double xMin, double xMa
       QPointF ip;
       ip.setX(brent(&Function::second_derivative, xLeft, xRight, MIN_DIFF));
       ip.setY(evaluateFunction(ip.x()));
-      std::cout << f_xLeft << ", " << f_xRight << std::endl;
       ips.push_back(ip);
     }
   }

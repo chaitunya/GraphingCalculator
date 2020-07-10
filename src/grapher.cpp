@@ -185,8 +185,6 @@ void Grapher::paintEvent(QPaintEvent *) {
         // );
         double a = 3.15;
         double b = 8.432;
-        std::cout << "Starting value: " << a << std::endl;
-        std::cout << "Ending value: " << b << std::endl;
         double dX = 0.000001;
         f->set_delta_x(0.000001);
         double integral = 0;
@@ -197,7 +195,6 @@ void Grapher::paintEvent(QPaintEvent *) {
           for (double i = a; i > b; i -= dX)
             integral -= f->derivative(i) * dX;
         }
-        std::cout << "Integral of derivative: " << integral << std::endl;
       }
 
       if (f->b_graphIntegral) {
@@ -409,36 +406,25 @@ DataSet Grapher::graphFunction(QPainter* painter, Function* F, mathmethod_t func
   }
   painter->drawPath(path);
   // dataset.removable_discontinuities.erase(dataset.removable_discontinuities.begin(), dataset.removable_discontinuities.end() - 1);
-  std::cout << "Removabl discontinuities" << std::endl;
   double x=0, y=0;
   if (dataset.removable_discontinuities.size() > 0) {
     for (int i = 0; i < dataset.removable_discontinuities.size(); i++) {
       QPointF pt = dataset.removable_discontinuities[i];
       x += pt.x();
       y += pt.y();
-      // std::cout << pt.x() << ", " << pt.y() << std::endl;
     }
-    std::cout << x / dataset.removable_discontinuities.size() << ", " << y / dataset.removable_discontinuities.size() << std::endl;
   }
-  std::cout << "inflection points" << std::endl;
   for (int i = 0; i < dataset.inflection_points.size(); i++) {
     QPointF pt = dataset.inflection_points[i];
-    std::cout << pt.x() << ", " << pt.y() << std::endl;
   }
-  std::cout << "relative maxmimums" << std::endl;
   for (int i = 0; i < dataset.relative_maximums.size(); i++) {
     QPointF pt = dataset.relative_maximums[i];
-    std::cout << pt.x() << ", " << pt.y() << std::endl;
   }
-  std::cout << "relative minimums" << std::endl;
   for (int i = 0; i < dataset.relative_minimums.size(); i++) {
     QPointF pt = dataset.relative_minimums[i];
-    std::cout << pt.x() << ", " << pt.y() << std::endl;
   }
-  std::cout << "Zeros" << std::endl;
   for (int i = 0; i < dataset.zeros.size(); i++) {
     QPointF pt = dataset.zeros[i];
-    std::cout << pt.x() << ", " << pt.y() << std::endl;
   }
   return dataset;
 }
