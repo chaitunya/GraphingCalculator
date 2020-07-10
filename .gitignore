@@ -13,3 +13,4 @@ compile_commands.json
 GraphingCalculator.cbp
 .tags
 *.plist
+build/
